@@ -3,13 +3,24 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package sistemimenaxhimitoraritprovimeve;
-
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import javax.swing.JOptionPane;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import javax.swing.table.DefaultTableModel;
+import net.proteanit.sql.DbUtils;
 /**
  *
  * @author Lenovo
  */
 public class MainMenu extends javax.swing.JFrame {
-
+    Connection Con=null;
+    PreparedStatement Pst=null;
+    ResultSet Rs=null,Rs1=null;
+    Statement St=null,St1=null;
     /**
      * Creates new form MainMenu
      */

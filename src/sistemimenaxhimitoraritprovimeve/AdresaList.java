@@ -305,7 +305,7 @@ public class AdresaList extends javax.swing.JFrame {
                 PreparedStatement Save=Con.prepareStatement(UpdateQuery);
                 Save.setInt(4, Key);
                 Save.setString(1, ShtetiTb.getText());
-                Save.setInt(2, ZipKodiTb.getText());
+                Save.setInt(2, Integer.valueOf(ZipKodiTb.getText()));
                 Save.setString(3, QytetiTb.getText());
                 if(Save.executeUpdate()==1){
                     DisplayAdresa();
