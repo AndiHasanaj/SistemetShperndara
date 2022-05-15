@@ -22,9 +22,9 @@ public class DepartamentiList extends javax.swing.JFrame {
 
     private void DisplayDepartamenti(){
         try{
-            Con=DriverManager.getConnection("jdbc:mysql://localhost:3306/librarydb","root","");
+            Con=DriverManager.getConnection("jdbc:mysql://localhost:3308/sistemipërmenaxhimineoraritprovimeve","root","");
             St=Con.createStatement();
-            Rs=St.executeQuery("Select * from DepartamentiTbl");
+            Rs=St.executeQuery("Select * from departamenti");
             DepartamentiTable.setModel(DbUtils.resultSetToTableModel(Rs));
         
         }catch(SQLException e){
@@ -248,11 +248,10 @@ public class DepartamentiList extends javax.swing.JFrame {
         }else{
             try{
                 CountDepartamentet();
-                Con=DriverManager.getConnection("jdbc:mysql://localhost:3306/librarydb","root","");
-                PreparedStatement Save=Con.prepareStatement("Insert into AdresaTbl values (?,?,?)");
-                Save.setInt(1, DepartamentiID);
-                Save.setString(2, EmriDepartamentitTb.getText());
-                Save.setInt(3, FakultetiCb.getSelectedIndex()+1);
+                Con=DriverManager.getConnection("jdbc:mysql://localhost:3308/sistemipërmenaxhimineoraritprovimeve","root","");
+                PreparedStatement Save=Con.prepareStatement("Insert into departamenti (EmriDepartamentit,FakultetiID) values (?,?)");
+                Save.setString(1, EmriDepartamentitTb.getText());
+                Save.setInt(2, FakultetiCb.getSelectedIndex()+1);
                 int row=Save.executeUpdate();
                 JOptionPane.showMessageDialog(this, "Departament Added!!!");
                 Con.close();
@@ -267,8 +266,8 @@ public class DepartamentiList extends javax.swing.JFrame {
     private void EditoBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditoBtnActionPerformed
         if(!(EmriDepartamentitTb.getText().isEmpty()||FakultetiCb.getSelectedIndex()==-1)){
             try{
-                String UpdateQuery="Update BookTbl set BName=?,Author=?,Price=? where BID=?"+Key;
-                Con=DriverManager.getConnection("jdbc:mysql://localhost:3306/librarydb","root","");
+                String UpdateQuery="Update departamenti set EmriDepartamentit=?,FakultetiID=? where DepartamentiID="+Key;
+                Con=DriverManager.getConnection("jdbc:mysql://localhost:3308/sistemipërmenaxhimineoraritprovimeve","root","");
                 PreparedStatement Save=Con.prepareStatement(UpdateQuery);
                 Save.setInt(4, Key);
                 Save.setString(1, EmriDepartamentitTb.getText());
@@ -307,8 +306,8 @@ public class DepartamentiList extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Select a Departament !!");
         }else{
             try{
-                Con=DriverManager.getConnection("jdbc:mysql://localhost:3306/librarydb","root","");
-                String Query="Delete from DepartamentTbl where DepartamentID="+Key;
+                Con=DriverManager.getConnection("jdbc:mysql://localhost:3308/sistemipërmenaxhimineoraritprovimeve","root","");
+                String Query="Delete from departamenti where DepartamentiID="+Key;
                 Statement Del=Con.createStatement();
                 Del.executeUpdate(Query);
                 JOptionPane.showMessageDialog(this,"Departament Deleted!!!");

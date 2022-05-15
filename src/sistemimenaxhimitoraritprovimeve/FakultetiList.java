@@ -19,18 +19,33 @@ public class FakultetiList extends javax.swing.JFrame {
     public FakultetiList() {
         initComponents();
         DisplayFakulteti();
+        UpdateCombo();
     }
 
     private void DisplayFakulteti(){
         try{
-            Con=DriverManager.getConnection("jdbc:mysql://localhost:3306/librarydb","root","");
+            Con=DriverManager.getConnection("jdbc:mysql://localhost:3308/sistemipërmenaxhimineoraritprovimeve","root","");
             St=Con.createStatement();
-            Rs=St.executeQuery("Select * from FakultetiTbl");
+            Rs=St.executeQuery("Select * from Fakulteti");
             FakultetiTable.setModel(DbUtils.resultSetToTableModel(Rs));
         
         }catch(SQLException e){
         
         
+        }
+    }
+    public void UpdateCombo(){
+        String ComboBox="select * from universiteti";
+        try{
+            Con=DriverManager.getConnection("jdbc:mysql://localhost:3308/sistemipërmenaxhimineoraritprovimeve","root","");
+            Pst=Con.prepareStatement(ComboBox);
+            Rs=Pst.executeQuery();
+            while(Rs.next()){
+                UniversitetiCb.addItem(Rs.getString("EmriUniversiteti"));
+            }
+        }
+        catch(Exception e){
+            
         }
     }
     
@@ -39,7 +54,7 @@ public class FakultetiList extends javax.swing.JFrame {
     
         try{
             St1=Con.createStatement();
-            Rs1=St1.executeQuery("Select Max(FakultetiID) from FakultetiTbl");
+            Rs1=St1.executeQuery("Select Max(FakultetiID) from Fakulteti");
             Rs1.next();
             FakultetiID=Rs1.getInt(1)+1;
         }catch(SQLException e){
@@ -47,6 +62,7 @@ public class FakultetiList extends javax.swing.JFrame {
         
         }
     }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -98,6 +114,17 @@ public class FakultetiList extends javax.swing.JFrame {
 
         jLabel6.setFont(new java.awt.Font("Bahnschrift", 0, 14)); // NOI18N
         jLabel6.setText("Universiteti");
+
+        UniversitetiCb.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                UniversitetiCbFocusGained(evt);
+            }
+        });
+        UniversitetiCb.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                UniversitetiCbActionPerformed(evt);
+            }
+        });
 
         jLabel7.setFont(new java.awt.Font("Bahnschrift", 0, 14)); // NOI18N
         jLabel7.setText("Adresa");
@@ -264,7 +291,7 @@ public class FakultetiList extends javax.swing.JFrame {
         }else{
             try{
                 CountFakultetet();
-                Con=DriverManager.getConnection("jdbc:mysql://localhost:3306/librarydb","root","");
+                Con=DriverManager.getConnection("jdbc:mysql://localhost:3308/sistemipërmenaxhimineoraritprovimeve","root","");
                 PreparedStatement Save=Con.prepareStatement("Insert into FakultetiTbl values (?,?,?)");
                 Save.setInt(1, FakultetiID);
                 Save.setString(2, EmriFakultetitTb.getText());
@@ -343,6 +370,15 @@ public class FakultetiList extends javax.swing.JFrame {
     private void BackBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BackBtnMouseClicked
         // TODO add your handling code here:
     }//GEN-LAST:event_BackBtnMouseClicked
+
+    
+    
+    private void UniversitetiCbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UniversitetiCbActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_UniversitetiCbActionPerformed
+
+    private void UniversitetiCbFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_UniversitetiCbFocusGained
+    }//GEN-LAST:event_UniversitetiCbFocusGained
 
     /**
      * @param args the command line arguments

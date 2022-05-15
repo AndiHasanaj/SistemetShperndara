@@ -23,9 +23,9 @@ public class UniversitetiList extends javax.swing.JFrame {
 
     private void DisplayUniversiteti(){
         try{
-            Con=DriverManager.getConnection("jdbc:mysql://localhost:3306/librarydb","root","");
+            Con=DriverManager.getConnection("jdbc:mysql://localhost:3308/sistemipërmenaxhimineoraritprovimeve","root","");
             St=Con.createStatement();
-            Rs=St.executeQuery("Select * from UniversitetiTbl");
+            Rs=St.executeQuery("Select * from universiteti");
             UniversitetiTable.setModel(DbUtils.resultSetToTableModel(Rs));
         
         }catch(SQLException e){
@@ -232,8 +232,8 @@ public class UniversitetiList extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Select a Universitet !!");
         }else{
             try{
-                Con=DriverManager.getConnection("jdbc:mysql://localhost:3306/librarydb","root","");
-                String Query="Delete from UniversitetiTbl where UniversitetiID="+Key;
+                Con=DriverManager.getConnection("jdbc:mysql://localhost:3308/sistemipërmenaxhimineoraritprovimeve","root","");
+                String Query="Delete from universiteti where UniversitetiID="+Key;
                 Statement Del=Con.createStatement();
                 Del.executeUpdate(Query);
                 JOptionPane.showMessageDialog(this,"Universiteti Deleted!!!");
@@ -252,10 +252,9 @@ public class UniversitetiList extends javax.swing.JFrame {
         }else{
             try{
                 CountUniversiteti();
-                Con=DriverManager.getConnection("jdbc:mysql://localhost:3306/librarydb","root","");
-                PreparedStatement Save=Con.prepareStatement("Insert into UniversitetiTbl values (?,?,?)");
-                Save.setInt(1, UniversitetiID);
-                Save.setString(2, EmriUniversitetiTb.getText());
+                Con=DriverManager.getConnection("jdbc:mysql://localhost:3308/sistemipërmenaxhimineoraritprovimeve","root","");
+                PreparedStatement Save=Con.prepareStatement("Insert into universiteti (EmriUniversiteti) values (?)");
+                Save.setString(1, EmriUniversitetiTb.getText());
                 int row=Save.executeUpdate();
                 JOptionPane.showMessageDialog(this, "Universiteti Added!!!");
                 Con.close();
@@ -270,10 +269,9 @@ public class UniversitetiList extends javax.swing.JFrame {
     private void EditoBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditoBtnActionPerformed
         if(!(EmriUniversitetiTb.getText().isEmpty())){
             try{
-                String UpdateQuery="Update UniversitetTbl set EmriUniversiteti=? where BID=?"+Key;
-                Con=DriverManager.getConnection("jdbc:mysql://localhost:3306/librarydb","root","");
+                String UpdateQuery="Update Universiteti set EmriUniversiteti=? where UniversitetiID="+Key;
+                Con=DriverManager.getConnection("jdbc:mysql://localhost:3308/sistemipërmenaxhimineoraritprovimeve","root","");
                 PreparedStatement Save=Con.prepareStatement(UpdateQuery);
-                Save.setInt(2, Key);
                 Save.setString(1, EmriUniversitetiTb.getText());
                 if(Save.executeUpdate()==1){
                     DisplayUniversiteti();
