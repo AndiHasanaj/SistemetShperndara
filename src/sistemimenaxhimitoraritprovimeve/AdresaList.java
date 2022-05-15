@@ -9,6 +9,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import javax.swing.table.DefaultTableModel;
 import net.proteanit.sql.DbUtils;
+import java.sql.*;
 
 
 public class AdresaList extends javax.swing.JFrame {
@@ -24,9 +25,9 @@ public class AdresaList extends javax.swing.JFrame {
 
     private void DisplayAdresa(){
         try{
-            Con=DriverManager.getConnection("jdbc:mysql://localhost:3306/librarydb","root","");
+            Con=DriverManager.getConnection("jdbc:mysql://localhost:3308/sistemipërmenaxhimineoraritprovimeve","root","");
             St=Con.createStatement();
-            Rs=St.executeQuery("Select * from AdresaTbl");
+            Rs=St.executeQuery("Select * from Adresa");
             AdresaTable.setModel(DbUtils.resultSetToTableModel(Rs));
         
         }catch(SQLException e){
@@ -258,8 +259,8 @@ public class AdresaList extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Select a Adress !!");
         }else{
             try{
-                Con=DriverManager.getConnection("jdbc:mysql://localhost:3306/librarydb","root","");
-                String Query="Delete from AdresaTbl where AdresaID="+Key;
+                Con=DriverManager.getConnection("jdbc:mysql://localhost:3308/sistemipërmenaxhimineoraritprovimeve","root","");
+                String Query="Delete from Adresa where AdresaID="+Key;
                 Statement Del=Con.createStatement();
                 Del.executeUpdate(Query);
                 JOptionPane.showMessageDialog(this,"Adresa Deleted!!!");
@@ -279,12 +280,11 @@ public class AdresaList extends javax.swing.JFrame {
         }else{
             try{
                 CountBooks();
-                Con=DriverManager.getConnection("jdbc:mysql://localhost:3306/librarydb","root","");
-                PreparedStatement Save=Con.prepareStatement("Insert into AdresaTbl values (?,?,?)");
-                Save.setInt(1, AdresaID);
-                Save.setString(2, ShtetiTb.getText());
-                Save.setInt(3, ZipKodiTb);
-                Save.setString(4, QytetiTb.getText());
+                Con=DriverManager.getConnection("jdbc:mysql://localhost:3308/sistemipërmenaxhimineoraritprovimeve","root","");
+                PreparedStatement Save=Con.prepareStatement("Insert into Adresa (Shteti,ZipKodi,Qyteti) values (?,?,?)");
+                Save.setString(1, ShtetiTb.getText());
+                Save.setString(2, ZipKodiTb.getText());
+                Save.setString(3, QytetiTb.getText());
                 int row=Save.executeUpdate();
                 JOptionPane.showMessageDialog(this, "Adresa Added!!!");
                 Con.close();
@@ -298,14 +298,13 @@ public class AdresaList extends javax.swing.JFrame {
 
     private void EditoBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditoBtnActionPerformed
         
-        if(!(ShtetiTb.getText().isEmpty()||ZipKodi.getText().isEmpty()||ShtetiTb.getText().isEmpty())){
+        if(!(ShtetiTb.getText().isEmpty()||ZipKodiTb.getText().isEmpty()||ShtetiTb.getText().isEmpty())){
             try{
-                String UpdateQuery="Update BookTbl set BName=?,Author=?,Price=? where BID=?"+Key;
-                Con=DriverManager.getConnection("jdbc:mysql://localhost:3306/librarydb","root","");
+                String UpdateQuery="Update Adresa set Shteti=?,ZipKodi=?,Qyteti=? where AdresaID="+Key;
+                Con=DriverManager.getConnection("jdbc:mysql://localhost:3308/sistemipërmenaxhimineoraritprovimeve","root","");
                 PreparedStatement Save=Con.prepareStatement(UpdateQuery);
-                Save.setInt(4, Key);
                 Save.setString(1, ShtetiTb.getText());
-                Save.setInt(2, Integer.valueOf(ZipKodiTb.getText()));
+                Save.setString(2, ZipKodiTb.getText());
                 Save.setString(3, QytetiTb.getText());
                 if(Save.executeUpdate()==1){
                     DisplayAdresa();
@@ -326,7 +325,7 @@ public class AdresaList extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_BackBtnActionPerformed
 
-    int Key=-1;
+    int Key=0;
     private void AdresaTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_AdresaTableMouseClicked
         DefaultTableModel model =(DefaultTableModel) AdresaTable.getModel();
         int MyIndex=AdresaTable.getSelectedRow();

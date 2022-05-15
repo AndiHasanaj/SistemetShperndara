@@ -34,7 +34,7 @@ public class LogInForm extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        UNameTb = new javax.swing.JTextField();
+        UsernameTb = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         PasswordTb = new javax.swing.JPasswordField();
@@ -46,7 +46,7 @@ public class LogInForm extends javax.swing.JFrame {
         setBackground(new java.awt.Color(255, 255, 255));
         setUndecorated(true);
 
-        jPanel1.setBackground(new java.awt.Color(51, 0, 255));
+        jPanel1.setBackground(new java.awt.Color(204, 204, 255));
         jPanel1.setToolTipText("");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -66,10 +66,10 @@ public class LogInForm extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("Bahnschrift", 0, 18)); // NOI18N
         jLabel3.setText("LogIn");
 
-        UNameTb.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        UNameTb.addActionListener(new java.awt.event.ActionListener() {
+        UsernameTb.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        UsernameTb.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                UNameTbActionPerformed(evt);
+                UsernameTbActionPerformed(evt);
             }
         });
 
@@ -79,7 +79,11 @@ public class LogInForm extends javax.swing.JFrame {
         jLabel7.setFont(new java.awt.Font("Bahnschrift", 0, 18)); // NOI18N
         jLabel7.setText("Password");
 
-        PasswordTb.setText("jPasswordField1");
+        PasswordTb.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                PasswordTbActionPerformed(evt);
+            }
+        });
 
         SignInBtn.setText("SignIn");
         SignInBtn.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -123,7 +127,7 @@ public class LogInForm extends javax.swing.JFrame {
                                     .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(UNameTb)
+                                    .addComponent(UsernameTb)
                                     .addComponent(PasswordTb))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
                                 .addComponent(XBtn)
@@ -152,7 +156,7 @@ public class LogInForm extends javax.swing.JFrame {
                 .addGap(35, 35, 35)
                 .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(UNameTb, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(UsernameTb, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -168,9 +172,9 @@ public class LogInForm extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void UNameTbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UNameTbActionPerformed
+    private void UsernameTbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UsernameTbActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_UNameTbActionPerformed
+    }//GEN-LAST:event_UsernameTbActionPerformed
 
     private void SignInBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SignInBtnActionPerformed
         // TODO add your handling code here:
@@ -186,14 +190,14 @@ public class LogInForm extends javax.swing.JFrame {
     }//GEN-LAST:event_XBtnMouseClicked
 
     private void SignInBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SignInBtnMouseClicked
-        if(UNameTb.getText().isEmpty()||PasswordTb.getText().isEmpty())
+        if(UsernameTb.getText().isEmpty()||PasswordTb.getText().isEmpty())
         {
-            JOptionPane.showMessageDialog(this,"");
+            JOptionPane.showMessageDialog(this,"Nuk keni plotesuar fushat");
         }else
         {
-            String Query ="select * from LibrarianTbl where LibName='"+UNameTb.getText()+"'and LibPass = '"+PasswordTb.getText()+"'";
+            String Query ="select * from users where uUsername='"+UsernameTb.getText()+"'and uPassword = '"+PasswordTb.getText()+"'";
             try{
-                Con=DriverManager.getConnection("jdbc:mysql://localhost:3306/librarydb","root","");
+                Con=DriverManager.getConnection("jdbc:mysql://localhost:3308/sistemipërmenaxhimineoraritprovimeve","root","");
                 St=Con.createStatement();
                 Rs=St.executeQuery(Query);
                 if(Rs.next()){
@@ -208,6 +212,10 @@ public class LogInForm extends javax.swing.JFrame {
         
         }
     }//GEN-LAST:event_SignInBtnMouseClicked
+
+    private void PasswordTbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PasswordTbActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_PasswordTbActionPerformed
 
     /**
      * @param args the command line arguments
@@ -248,7 +256,7 @@ public class LogInForm extends javax.swing.JFrame {
     private javax.swing.JLabel AdminBtn;
     private javax.swing.JPasswordField PasswordTb;
     private javax.swing.JButton SignInBtn;
-    private javax.swing.JTextField UNameTb;
+    private javax.swing.JTextField UsernameTb;
     private javax.swing.JLabel XBtn;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
