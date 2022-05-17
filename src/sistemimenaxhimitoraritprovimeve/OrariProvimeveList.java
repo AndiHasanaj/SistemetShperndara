@@ -273,7 +273,7 @@ public class OrariProvimeveList extends javax.swing.JFrame {
     }//GEN-LAST:event_DeleteBtnActionPerformed
 
     private void SaveBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SaveBtnActionPerformed
-        if(LëndaCb.getSelectedIndex()==-1||ProfesoriCb.getSelectedIndex()==-1||AfatiCb.getSelectedIndex()==-1||DataProvimitTb.getText().isEmpty())
+        if(LëndaCb.getSelectedIndex()==-1||ProfesoriCb.getSelectedIndex()==-1||AfatiCb.getSelectedIndex()==-1)
         {
             JOptionPane.showMessageDialog(this, "Missing Information !!!");
         }else{
@@ -285,11 +285,11 @@ public class OrariProvimeveList extends javax.swing.JFrame {
                 Save.setInt(2, LëndaCb.getSelectedIndex());
                 Save.setInt(3, ProfesoriCb.getSelectedIndex());
                 Save.setInt(4, AfatiCb.getSelectedIndex());
-                Save.setString(5, DataProvimitTb);
+                //Save.setString(5, DataProvimitTb);
                 int row=Save.executeUpdate();
                 JOptionPane.showMessageDialog(this, "OrariProvimit Added!!!");
                 Con.close();
-                DisplayOrariProvimit();
+               // DisplayOrariProvimit();
             }catch(Exception ex){
                 JOptionPane.showMessageDialog(this, ex);
             }
@@ -334,9 +334,9 @@ public class OrariProvimeveList extends javax.swing.JFrame {
         Key=Integer.valueOf(model.getValueAt(MyIndex,0).toString());
         if(LëndaCb.getSelectedIndex()==-1||ProfesoriCb.getSelectedIndex()==-1||AfatiCb.getSelectedIndex()==-1)
         LëndaCb.setSelectedIndex(Integer.valueOf(model.getValueAt(MyIndex,1).toString()));
-        ProfesoriCb.setSelectedIndex(Integer.valueOf(model.getValueAt(MyIndex,2).toString()));
+        //ProfesoriCb.setSelectedIndex(Integer.valueOf(model.getValueAt(MyIndex,2).toString()));
         AfatiCb.setSelectedIndex(Integer.valueOf(model.getValueAt(MyIndex,3).toString()));
-        DataProvimitTb.setText(model.getValueAt(MyIndex,4).toString());
+      //  DataProvimitTb.setText(model.getValueAt(MyIndex,4).toString());
     }//GEN-LAST:event_OrariProvimeveTableMouseClicked
 
     private void BackBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BackBtnMouseClicked

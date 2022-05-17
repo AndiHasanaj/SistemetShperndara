@@ -439,7 +439,7 @@ public class ProfesoriList extends javax.swing.JFrame {
     }//GEN-LAST:event_DeleteBtnActionPerformed
 
     private void SaveBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SaveBtnActionPerformed
-        if(DepartamentiCb.getSelectedIndex()==-1||MbiemriTb.getText().isEmpty()||UseriCb.getSelectedIndex()==-1||GjiniaTb.getText().isEmpty()||NumriPersonalTb.getText().isEmpty()||AdresaCb.getSelectedIndex()==-1||NumriTelefonitTb.getText().isEmpty()||TitulliTb.getText().isEmpty()||EmriTb.getText().isEmpty()||EmailTb.getText().isEmpty())
+        if(DepartamentiCb.getSelectedIndex()==-1||MbiemriTb.getText().isEmpty()||UseriCb.getSelectedIndex()==-1||NumriPersonalTb.getText().isEmpty()||AdresaCb.getSelectedIndex()==-1||NumriTelefonitTb.getText().isEmpty()||TitulliTb.getText().isEmpty()||EmriTb.getText().isEmpty()||EmailTb.getText().isEmpty())
         {
             JOptionPane.showMessageDialog(this, "Missing Information !!!");
         }else{
@@ -451,7 +451,7 @@ public class ProfesoriList extends javax.swing.JFrame {
                 Save.setString(2, MbiemriTb.getText());
                 Save.setString(3, DatëLindjaTb.getDate().toString());
                 Save.setInt(4, UseriCb.getSelectedIndex());
-                Save.setInt(5, GjiniaCb.getText());
+               // Save.setInt(5, GjiniaCb.getText());
                 Save.setString(6, NumriPersonalTb.getText());
                 Save.setInt(7, AdresaCb.getSelectedIndex());
                 Save.setString(8, NumriTelefonitTb.getText());
@@ -470,7 +470,7 @@ public class ProfesoriList extends javax.swing.JFrame {
     }//GEN-LAST:event_SaveBtnActionPerformed
 
     private void EditoBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditoBtnActionPerformed
-        if(!(DepartamentiCb.getSelectedIndex()==-1||MbiemriTb.getText().isEmpty()||UseriCb.getSelectedIndex()==-1||GjiniaTb.getText().isEmpty()||NumriPersonalTb.getText().isEmpty()||AdresaCb.getSelectedIndex()==-1||NumriTelefonitTb.getText().isEmpty()||TitulliTb.getText().isEmpty()||EmriTb.getText().isEmpty()||EmailTb.getText().isEmpty())){
+        if(!(DepartamentiCb.getSelectedIndex()==-1||MbiemriTb.getText().isEmpty()||UseriCb.getSelectedIndex()==-1||NumriPersonalTb.getText().isEmpty()||AdresaCb.getSelectedIndex()==-1||NumriTelefonitTb.getText().isEmpty()||TitulliTb.getText().isEmpty()||EmriTb.getText().isEmpty()||EmailTb.getText().isEmpty())){
             try{
                 String UpdateQuery="Update ProfesoriTbl set DepartamentiName=?,Mbiemri=?,UseriID=?,Gjinia=?,NumriPersonal=?,Adresa=?,NumriTelefonit=?,Titulli=?,Emri=?,Email=? where ProfesoriID=?"+Key;
                 Con=DriverManager.getConnection("jdbc:mysql://localhost:3306/librarydb","root","");
@@ -480,7 +480,7 @@ public class ProfesoriList extends javax.swing.JFrame {
                 Save.setString(2, MbiemriTb.getText());
                 Save.setString(3, DatëLindjaTb.getDate().toString());
                 Save.setInt(4, UseriCb.getSelectedIndex());
-                Save.setInt(5, GjiniaCb.getText());
+                //Save.setInt(5, GjiniaCb.getText());
                 Save.setString(6, NumriPersonalTb.getText());
                 Save.setInt(7, AdresaCb.getSelectedIndex());
                 Save.setString(8, NumriTelefonitTb.getText());
@@ -512,12 +512,12 @@ public class ProfesoriList extends javax.swing.JFrame {
         DefaultTableModel model =(DefaultTableModel) ProfesorTable.getModel();
         int MyIndex=ProfesorTable.getSelectedRow();
         Key=Integer.valueOf(model.getValueAt(MyIndex,0).toString());
-        if(DepartamentiCb.getSelectedIndex()==-1||MbiemriTb.getText().isEmpty()||UseriCb.getSelectedIndex()==-1||GjiniaTb.getText().isEmpty()||NumriPersonalTb.getText().isEmpty()||AdresaCb.getSelectedIndex()==-1||NumriTelefonitTb.getText().isEmpty()||TitulliTb.getText().isEmpty()||EmriTb.getText().isEmpty()||EmailTb.getText().isEmpty())
+        //if(DepartamentiCb.getSelectedIndex()==-1||MbiemriTb.getText().isEmpty()||UseriCb.getSelectedIndex()==-1||GjiniaTb.getText().isEmpty()||NumriPersonalTb.getText().isEmpty()||AdresaCb.getSelectedIndex()==-1||NumriTelefonitTb.getText().isEmpty()||TitulliTb.getText().isEmpty()||EmriTb.getText().isEmpty()||EmailTb.getText().isEmpty())
         DepartamentiCb.setSelectedIndex(Integer.valueOf(model.getValueAt(MyIndex, 2).toString()));
-        MbiemriTb.setText(model.getValueAt(MyIndex,3).toString());
-        DatëLindjaTb.setText(model.getValueAt(MyIndex,4).toString());
+       // MbiemriTb.setText(model.getValueAt(MyIndex,3).toString());
+       // DatëLindjaTb.setText(model.getValueAt(MyIndex,4).toString());
         UseriCb.setSelectedIndex(Integer.valueOf(model.getValueAt(MyIndex, 5).toString()));
-        GjiniaTb.setText(model.getValueAt(MyIndex,6).toString());
+       // GjiniaTb.setText(model.getValueAt(MyIndex,6).toString());
         NumriPersonalTb.setText(model.getValueAt(MyIndex,7).toString());
         AdresaCb.setSelectedIndex(Integer.valueOf(model.getValueAt(MyIndex, 8).toString()));
         NumriTelefonitTb.setText(model.getValueAt(MyIndex,9).toString());

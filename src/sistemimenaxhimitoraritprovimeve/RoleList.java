@@ -332,7 +332,7 @@ public class RoleList extends javax.swing.JFrame {
         Key=Integer.valueOf(model.getValueAt(MyIndex,0).toString());
         if(EmriRolitTb.getText().isEmpty()||PershkrimiRolitTb.getText().isEmpty())
         EmriRolitTb.setText(model.getValueAt(MyIndex,1).toString());
-        PershkrimiRolitTb.setText(model.getValueAt(MyIndex,2).toString());
+       // PershkrimiRolitTb.setText(model.getValueAt(MyIndex,2).toString());
     }//GEN-LAST:event_RoleTableMouseClicked
 
     private void BackBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BackBtnMouseClicked

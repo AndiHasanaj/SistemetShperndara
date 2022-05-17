@@ -6,6 +6,16 @@ package sistemimenaxhimitoraritprovimeve;
 
 import javax.swing.JOptionPane;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import javax.swing.JOptionPane;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import javax.swing.table.DefaultTableModel;
+import net.proteanit.sql.DbUtils;
+
 /**
  *
  * @author Lenovo
@@ -15,6 +25,10 @@ public class AdminLogin extends javax.swing.JFrame {
     /**
      * Creates new form AdminLogin
      */
+    Connection Con=null;
+    PreparedStatement Pst=null;
+    ResultSet Rs=null,Rs1=null;
+    Statement St=null,St1=null;
     public AdminLogin() {
         initComponents();
     }
@@ -184,7 +198,7 @@ public class AdminLogin extends javax.swing.JFrame {
     private void SignInBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SignInBtnActionPerformed
         if(PasswordTb.getText().isEmpty())
         {
-            JOptionPane.showMessageDialog(this,"Enter the password!!!")
+            JOptionPane.showMessageDialog(this,"Enter the password!!!");
         }
         else if(PasswordTb.getText().equals("Password"))
         {

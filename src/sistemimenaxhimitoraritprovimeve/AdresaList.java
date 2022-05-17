@@ -283,7 +283,7 @@ public class AdresaList extends javax.swing.JFrame {
                 PreparedStatement Save=Con.prepareStatement("Insert into AdresaTbl values (?,?,?)");
                 Save.setInt(1, AdresaID);
                 Save.setString(2, ShtetiTb.getText());
-                Save.setInt(3, ZipKodiTb);
+               // Save.setInt(3, ZipKodiTb);
                 Save.setString(4, QytetiTb.getText());
                 int row=Save.executeUpdate();
                 JOptionPane.showMessageDialog(this, "Adresa Added!!!");
@@ -298,14 +298,14 @@ public class AdresaList extends javax.swing.JFrame {
 
     private void EditoBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditoBtnActionPerformed
         
-        if(!(ShtetiTb.getText().isEmpty()||ZipKodi.getText().isEmpty()||ShtetiTb.getText().isEmpty())){
+        if(!(ShtetiTb.getText().isEmpty()||ShtetiTb.getText().isEmpty())){
             try{
                 String UpdateQuery="Update BookTbl set BName=?,Author=?,Price=? where BID=?"+Key;
                 Con=DriverManager.getConnection("jdbc:mysql://localhost:3306/librarydb","root","");
                 PreparedStatement Save=Con.prepareStatement(UpdateQuery);
                 Save.setInt(4, Key);
                 Save.setString(1, ShtetiTb.getText());
-                Save.setInt(2, ZipKodiTb.getText());
+             //   Save.setInt(2, ZipKodiTb.getText());
                 Save.setString(3, QytetiTb.getText());
                 if(Save.executeUpdate()==1){
                     DisplayAdresa();
