@@ -1,5 +1,5 @@
-
 package sistemimenaxhimitoraritprovimeve;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -273,7 +273,7 @@ public class OrariProvimeveList extends javax.swing.JFrame {
     }//GEN-LAST:event_DeleteBtnActionPerformed
 
     private void SaveBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SaveBtnActionPerformed
-        if(LëndaCb.getSelectedIndex()==-1||ProfesoriCb.getSelectedIndex()==-1||AfatiCb.getSelectedIndex()==-1||DataProvimitTb.getText().isEmpty())
+//        if(LëndaCb.getSelectedIndex()==-1||ProfesoriCb.getSelectedIndex()==-1||AfatiCb.getSelectedIndex()==-1||DataProvimitTb.getText().isEmpty())
         {
             JOptionPane.showMessageDialog(this, "Missing Information !!!");
         }else{

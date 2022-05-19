@@ -164,19 +164,7 @@ public class AdminLogin extends javax.swing.JFrame {
         }else
         {
             String Query ="select * from LibrarianTbl where LibName='"+PasswordTb.getText()+"'and LibPass = '"+PasswordTb.getText()+"'";
-            try{
-                Con=DriverManager.getConnection("jdbc:mysql://localhost:3306/librarydb","root","");
-                St=Con.createStatement();
-                Rs=St.executeQuery(Query);
-                if(Rs.next()){
-                    new MainMenu().setVisible(true);
-                    this.dispose();
-                }else{
-                    JOptionPane.showMessageDialog(this,"Wrong UserName and Password!!!");
-                }
-            }catch(SQLException e){
-                e.printStackTrace();
-            }
+
 
         }
     }//GEN-LAST:event_SignInBtnMouseClicked
@@ -184,7 +172,7 @@ public class AdminLogin extends javax.swing.JFrame {
     private void SignInBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SignInBtnActionPerformed
         if(PasswordTb.getText().isEmpty())
         {
-            JOptionPane.showMessageDialog(this,"Enter the password!!!")
+        //    JOptionPane.showMessageDialog(this,"Enter the password!!!")
         }
         else if(PasswordTb.getText().equals("Password"))
         {

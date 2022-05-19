@@ -330,9 +330,9 @@ public class AfatiList extends javax.swing.JFrame {
         int MyIndex=AfatiTable.getSelectedRow();
         Key=Integer.valueOf(model.getValueAt(MyIndex,0).toString());
         EmriAfatitTb.setText(model.getValueAt(MyIndex,1).toString());
-        DataFillimitTb.setText(model.getValueAt(MyIndex,2).toString());
+        //DataFillimitTb.setText(model.getValueAt(MyIndex,2).toString());
         String DataMbarimit=model.getValueAt(MyIndex,3).toString().substring(0,13);
-        DataMbarimitTb.setString(DataMbarimit);
+        //DataMbarimitTb.setString(DataMbarimit);
     }//GEN-LAST:event_AfatiTableMouseClicked
 
     private void BackBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BackBtnMouseClicked
