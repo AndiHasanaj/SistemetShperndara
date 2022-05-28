@@ -21,8 +21,9 @@ public class LogInForm extends javax.swing.JFrame {
     Statement St=null,St1=null;
     public LogInForm() {
         initComponents();
+        
     }
-
+    public static String username;
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -183,17 +184,19 @@ public class LogInForm extends javax.swing.JFrame {
                 Rs=St.executeQuery(Query);
                 if(Rs.next()){
                     if(Rs.getString("RoleID").equals("1")){
+                    username=Rs.getString("uUsername");
                     new MainMenu().setVisible(true);
                     this.dispose();
-                    SistemiMenaxhimitOraritProvimeve.username=Rs.getString("uUsername");
+                    
 //                    this.password=Rs.getString("uPassword");
-                    JOptionPane.showMessageDialog(this,SistemiMenaxhimitOraritProvimeve.username);
+                   
                     }
                     else{
-                    new OrariProvimeve().setVisible(true); 
-                    SistemiMenaxhimitOraritProvimeve.username=Rs.getString("uUsername");
+                    username=Rs.getString("uUsername");
+                    new OrariProvimeve(username).setVisible(true); 
+                    
 //                    this.password=Rs.getString("uPassword");
-                    JOptionPane.showMessageDialog(this,SistemiMenaxhimitOraritProvimeve.username);
+                    
 
                     }
                 }else{

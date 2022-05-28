@@ -33,12 +33,15 @@ public class OrariProvimeve extends javax.swing.JFrame {
     ResultSet Rs=null,Rs1=null;
     Statement St=null,St1=null;
     
-    
-    public OrariProvimeve() {
+    public String username;
+    public OrariProvimeve(String string) {
         initComponents();
+        
+        username = string;
         DisplayOrariProvimeve1();
         
         
+        JOptionPane.showMessageDialog(this,username);
     }
 
     /**
@@ -113,15 +116,18 @@ public class OrariProvimeve extends javax.swing.JFrame {
     
     private void DisplayOrariProvimeve1(){
         try{
+            
+            JOptionPane.showMessageDialog(this,username);
             Con=DriverManager.getConnection("jdbc:mysql://localhost:3308/sistemipërmenaxhimineoraritprovimeve","root","");
             St=Con.createStatement();
-              LogInForm loginform= new LogInForm();
-              JOptionPane.showMessageDialog(this,SistemiMenaxhimitOraritProvimeve.username);
+              
+            
+            
 //            Rs=St.executeQuery("Select * from OrariProvimeve");
-              Rs1= St.executeQuery("Select  DepartamentiID from users  where uUsername='1'");
+              Rs1= St.executeQuery("Select  DepartamentiID from users  where uUsername='"+username+"'");
               Rs1.next();
               String departamenti=Rs1.getString("DepartamentiId");
-              Rs=St.executeQuery("SELECT OrariProvimeve.OrariID,lënda.EmriLëndes, profesori.pEmri,profesori.pMbiemri,afati.AfatiEmri,OrariProvimeve.DataProvimit,departamenti.EmriDepartamentit,fakulteti.FakultetiEmri FROM ((((((OrariProvimeve INNER JOIN lënda ON OrariProvimeve.LëndaID = lënda.LëndaID) INNER JOIN profesori ON OrariProvimeve.ProfesoriID = profesori.ProfesoriID) INNER JOIN afati ON OrariProvimeve.AfatiID = afati.AfatiID)inner join departamenti on lënda.DepartamentiID=departamenti.DepartamentiID) inner join fakulteti on departamenti.FakultetiID=fakulteti.FakultetiID) inner join users on departamenti.DepartamentiID=users.DepartamentiID) where departamenti.DepartamentiID="+departamenti);
+              Rs=St.executeQuery("SELECT OrariProvimeve.OrariID,lënda.EmriLëndes,profesori.pEmri,profesori.pMbiemri,afati.AfatiEmri,OrariProvimeve.DataProvimit,departamenti.EmriDepartamentit,fakulteti.FakultetiEmri FROM (((((OrariProvimeve INNER JOIN lënda ON OrariProvimeve.LëndaID = lënda.LëndaID) INNER JOIN profesori ON OrariProvimeve.ProfesoriID = profesori.ProfesoriID) INNER JOIN afati ON OrariProvimeve.AfatiID = afati.AfatiID) inner join departamenti on lënda.DepartamentiID=departamenti.DepartamentiID) inner join fakulteti on departamenti.FakultetiID=fakulteti.FakultetiID) where departamenti.DepartamentiID='"+departamenti+"'");
 //            SELECT OrariProvimeve.OrariID,lënda.EmriLëndes, profesori.pEmri,afati.AfatiEmri
 //            FROM (((OrariProvimeve
 //            INNER JOIN lënda ON OrariProvimeve.LëndaID = lënda.LëndaID)
@@ -174,7 +180,7 @@ public class OrariProvimeve extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new OrariProvimeve().setVisible(true);
+                new OrariProvimeve(LogInForm.username).setVisible(true);
             }
         });
     }
