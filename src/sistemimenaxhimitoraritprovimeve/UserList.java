@@ -11,7 +11,7 @@ import javax.swing.table.DefaultTableModel;
 import net.proteanit.sql.DbUtils;
 
 public class UserList extends javax.swing.JFrame {
-
+    
     Connection Con=null;
     PreparedStatement Pst=null;
     ResultSet Rs=null,Rs1=null;
@@ -19,13 +19,16 @@ public class UserList extends javax.swing.JFrame {
     public UserList() {
         initComponents();
         DisplayUser();
-    }
+        UpdateFakulteti();
+        UpdateDepartamenti();
+    }   
 
     private void DisplayUser(){
         try{
-            Con=DriverManager.getConnection("jdbc:mysql://localhost:3306/librarydb","root","");
+            Con=DriverManager.getConnection("jdbc:mysql://localhost:3308/sistemipërmenaxhimineoraritprovimeve","root","");
             St=Con.createStatement();
-            Rs=St.executeQuery("Select * from UserTbl");
+//            Rs=St.executeQuery("Select UserID,RoleID,uName,uLastName,uEmail from Users");
+            Rs=St.executeQuery("Select UserID,RoleID,fakulteti.FakultetiEmri,departamenti.EmriDepartamentit,uName,uLastName,uEmail,uUsername,uPassword from ((Users inner join departamenti on users.departamentiId=departamenti.DepartamentiID) inner join fakulteti ON users.FakultetiID=fakulteti.FakultetiID);");
             UserTable.setModel(DbUtils.resultSetToTableModel(Rs));
         
         }catch(SQLException e){
@@ -33,12 +36,40 @@ public class UserList extends javax.swing.JFrame {
         
         }
     }
+    public void UpdateDepartamenti(){
+        String ComboBox="select * from departamenti";
+        try{
+            Con=DriverManager.getConnection("jdbc:mysql://localhost:3308/sistemipërmenaxhimineoraritprovimeve","root","");
+            Pst=Con.prepareStatement(ComboBox);
+            Rs=Pst.executeQuery();
+            while(Rs.next()){
+               DepartamentiCb.addItem(Rs.getString("EmriDepartamentit"));
+            }
+        }
+        catch(Exception e){
+            
+        }
+    }
+     public void UpdateFakulteti(){
+        String ComboBox="select * from fakulteti";
+        try{
+            Con=DriverManager.getConnection("jdbc:mysql://localhost:3308/sistemipërmenaxhimineoraritprovimeve","root","");
+            Pst=Con.prepareStatement(ComboBox);
+            Rs=Pst.executeQuery();
+            while(Rs.next()){
+               FakultetiCb.addItem(Rs.getString("FakultetiEmri"));
+            }
+        }
+        catch(Exception e){
+            
+        }
+    }
     int UserID;
     private void CountBooks(){
     
         try{
             St1=Con.createStatement();
-            Rs1=St1.executeQuery("Select Max(UserID) from UserTbl");
+            Rs1=St1.executeQuery("Select Max(UserID) from Users");
             Rs1.next();
             UserID=Rs1.getInt(1)+1;
         }catch(SQLException e){
@@ -52,8 +83,6 @@ public class UserList extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         RoliCb = new javax.swing.JComboBox<>();
         jLabel6 = new javax.swing.JLabel();
@@ -72,6 +101,10 @@ public class UserList extends javax.swing.JFrame {
         BackBtn = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         UserTable = new javax.swing.JTable();
+        FakultetiCb = new javax.swing.JComboBox<>();
+        DepartamentiCb = new javax.swing.JComboBox<>();
+        jLabel11 = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -81,18 +114,10 @@ public class UserList extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Bahnschrift", 0, 24)); // NOI18N
         jLabel2.setText("Useri");
 
-        jLabel1.setText("Numri i Userave është :");
-
-        jTextField2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jTextField2.setText("Search");
-        jTextField2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField2ActionPerformed(evt);
-            }
-        });
-
         jLabel5.setFont(new java.awt.Font("Bahnschrift", 0, 14)); // NOI18N
         jLabel5.setText("Roli");
+
+        RoliCb.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2" }));
 
         jLabel6.setFont(new java.awt.Font("Bahnschrift", 0, 14)); // NOI18N
         jLabel6.setText("Emri i Userit");
@@ -198,6 +223,34 @@ public class UserList extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(UserTable);
 
+        FakultetiCb.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                FakultetiCbFocusGained(evt);
+            }
+        });
+        FakultetiCb.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                FakultetiCbActionPerformed(evt);
+            }
+        });
+
+        DepartamentiCb.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                DepartamentiCbFocusGained(evt);
+            }
+        });
+        DepartamentiCb.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                DepartamentiCbActionPerformed(evt);
+            }
+        });
+
+        jLabel11.setFont(new java.awt.Font("Bahnschrift", 0, 14)); // NOI18N
+        jLabel11.setText("Departamenti");
+
+        jLabel12.setFont(new java.awt.Font("Bahnschrift", 0, 14)); // NOI18N
+        jLabel12.setText("Fakulteti");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -205,58 +258,59 @@ public class UserList extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(36, 36, 36)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 421, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1035, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1035, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(RoliCb, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(MbiemriUseritTb)
-                            .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(UserNameTb, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(EmailiUseritTb, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
-                            .addComponent(EmriUseritTb)
-                            .addComponent(PasswordTb))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(EditoBtn)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(RoliCb, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(MbiemriUseritTb)
+                                    .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(UserNameTb, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(BackBtn))
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(EmailiUseritTb, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
+                                    .addComponent(EmriUseritTb)
+                                    .addComponent(PasswordTb)))
+                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 421, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(SaveBtn)
+                                .addGap(3, 3, 3)
                                 .addComponent(DeleteBtn)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(SaveBtn))))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(811, 811, 811)
-                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(625, Short.MAX_VALUE))
+                                .addComponent(EditoBtn)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(BackBtn))
+                            .addComponent(FakultetiCb, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(DepartamentiCb, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(28, 28, 28)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addContainerGap()
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel5)
-                            .addComponent(jLabel6))
+                            .addComponent(jLabel6)
+                            .addComponent(jLabel12))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(RoliCb, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(EmriUseritTb, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(FakultetiCb))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel7)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -270,89 +324,127 @@ public class UserList extends javax.swing.JFrame {
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel10)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(PasswordTb, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel8)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(EmailiUseritTb, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(DeleteBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
-                                    .addComponent(SaveBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addGap(30, 30, 30)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(PasswordTb, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(SaveBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(DeleteBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(EditoBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(BackBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))))))
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(BackBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel1)
-                        .addContainerGap(407, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 406, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(12, Short.MAX_VALUE))))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel8)
+                            .addComponent(jLabel11))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(EmailiUseritTb, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(DepartamentiCb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(63, 63, 63)))
+                .addGap(242, 242, 242)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 406, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(31, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 4, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
+    private void DepartamentiCbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DepartamentiCbActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField2ActionPerformed
+    }//GEN-LAST:event_DepartamentiCbActionPerformed
 
-    private void EmriUseritTbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EmriUseritTbActionPerformed
+    private void DepartamentiCbFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_DepartamentiCbFocusGained
         // TODO add your handling code here:
-    }//GEN-LAST:event_EmriUseritTbActionPerformed
+    }//GEN-LAST:event_DepartamentiCbFocusGained
 
-    private void MbiemriUseritTbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MbiemriUseritTbActionPerformed
+    private void FakultetiCbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FakultetiCbActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_MbiemriUseritTbActionPerformed
+    }//GEN-LAST:event_FakultetiCbActionPerformed
 
-    private void EmailiUseritTbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EmailiUseritTbActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_EmailiUseritTbActionPerformed
+    private void FakultetiCbFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_FakultetiCbFocusGained
 
-    private void UserNameTbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UserNameTbActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_UserNameTbActionPerformed
+    }//GEN-LAST:event_FakultetiCbFocusGained
 
-    private void PasswordTbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PasswordTbActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_PasswordTbActionPerformed
+    private void UserTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_UserTableMouseClicked
+        DefaultTableModel model =(DefaultTableModel) UserTable.getModel();
+        int MyIndex=UserTable.getSelectedRow();
+        Key=Integer.valueOf(model.getValueAt(MyIndex,0).toString());
+        EmriUseritTb.setText(model.getValueAt(MyIndex,4).toString());
+        MbiemriUseritTb.setText(model.getValueAt(MyIndex,5).toString());
+        EmailiUseritTb.setText(model.getValueAt(MyIndex,6).toString());
+        UserNameTb.setText(model.getValueAt(MyIndex,7).toString());
+        PasswordTb.setText(model.getValueAt(MyIndex,8).toString());
+        String updatebox="select * from users where UserID="+Key;
+        try{
+            Con=DriverManager.getConnection("jdbc:mysql://localhost:3308/sistemipërmenaxhimineoraritprovimeve","root","");
+            Pst=Con.prepareStatement(updatebox);
+            Rs=Pst.executeQuery();
+            while(Rs.next()){
 
-    private void DeleteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteBtnActionPerformed
-        if(Key==0){
-            JOptionPane.showMessageDialog(this, "Select a User !!");
-        }else{
-            try{
-                Con=DriverManager.getConnection("jdbc:mysql://localhost:3306/librarydb","root","");
-                String Query="Delete from UserTbl where UserID="+Key;
-                Statement Del=Con.createStatement();
-                Del.executeUpdate(Query);
-                JOptionPane.showMessageDialog(this,"User Deleted!!!");
-                DisplayUser();
-            }catch(Exception e){
-            
-      
+                RoliCb.setSelectedIndex(Rs.getInt("RoleID")-1);
+                DepartamentiCb.setSelectedIndex(Rs.getInt("DepartamentiID")-1);
+                FakultetiCb.setSelectedIndex(Rs.getInt("FakultetiID")-1);
             }
         }
-    }//GEN-LAST:event_DeleteBtnActionPerformed
+        catch(Exception e){
+
+        }
+
+    }//GEN-LAST:event_UserTableMouseClicked
+
+    private void BackBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BackBtnActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_BackBtnActionPerformed
+
+    private void BackBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BackBtnMouseClicked
+        new MainMenu().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_BackBtnMouseClicked
+
+    private void EditoBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditoBtnActionPerformed
+        if(!(RoliCb.getSelectedIndex()==-1||EmriUseritTb.getText().isEmpty()||MbiemriUseritTb.getText().isEmpty()||EmailiUseritTb.getText().isEmpty()||UserNameTb.getText().isEmpty()||PasswordTb.getText().isEmpty())){
+            try{
+                String UpdateQuery="Update users set RoleID=?,uName=?,uLastName=?,uEmail=?,uUsername=?,uPassword=?,FakultetiID=?,DepartamentiID=? where UserID="+Key;
+                Con=DriverManager.getConnection("jdbc:mysql://localhost:3308/sistemipërmenaxhimineoraritprovimeve","root","");
+                PreparedStatement Save=Con.prepareStatement(UpdateQuery);
+                Save.setInt(1, RoliCb.getSelectedIndex()+1);
+                Save.setString(2, EmriUseritTb.getText());
+                Save.setString(3, MbiemriUseritTb.getText());
+                Save.setString(4, EmailiUseritTb.getText());
+                Save.setString(5, UserNameTb.getText());
+                Save.setString(6, PasswordTb.getText());
+                Save.setInt(7, FakultetiCb.getSelectedIndex()+1);
+                Save.setInt(8, DepartamentiCb.getSelectedIndex()+1);
+
+                if(Save.executeUpdate()==1){
+                    DisplayUser();
+                    JOptionPane.showMessageDialog(this,"User Updated!!!");
+                }else{
+
+                    JOptionPane.showMessageDialog(this,"Mising Information!!!");
+                }
+
+            }catch(Exception e){
+
+            }
+        }
+    }//GEN-LAST:event_EditoBtnActionPerformed
 
     private void SaveBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SaveBtnActionPerformed
         if(RoliCb.getSelectedIndex()==-1||EmriUseritTb.getText().isEmpty()||MbiemriUseritTb.getText().isEmpty()||EmailiUseritTb.getText().isEmpty()||UserNameTb.getText().isEmpty()||PasswordTb.getText().isEmpty())
@@ -361,15 +453,17 @@ public class UserList extends javax.swing.JFrame {
         }else{
             try{
                 CountBooks();
-                Con=DriverManager.getConnection("jdbc:mysql://localhost:3306/librarydb","root","");
-                PreparedStatement Save=Con.prepareStatement("Insert into RoleTbl values (?,?,?)");
-                Save.setInt(1, UserID);
-                Save.setInt(2, RoliCb.getSelectedIndex());
-                Save.setString(3, EmriUseritTb.getText());
-                Save.setString(4, MbiemriUseritTb.getText());
-                Save.setString(5, EmailiUseritTb.getText());
-                Save.setString(6, UserNameTb.getText());
+                Con=DriverManager.getConnection("jdbc:mysql://localhost:3308/sistemipërmenaxhimineoraritprovimeve","root","");
+                PreparedStatement Save=Con.prepareStatement("Insert into users (RoleID,uName,uLastName,uEmail,uUsername,uPassword,DepartamentiID,FakultetiID) values (?,?,?,?,?,?,?,?)");
+                Save.setInt(1, RoliCb.getSelectedIndex()+1);
+                Save.setString(2, EmriUseritTb.getText());
+                Save.setString(3, MbiemriUseritTb.getText());
+                Save.setString(4, EmailiUseritTb.getText());
+                Save.setString(5, UserNameTb.getText());
                 Save.setString(6, PasswordTb.getText());
+                Save.setInt(7, DepartamentiCb.getSelectedIndex()+1);
+                Save.setInt(8, FakultetiCb.getSelectedIndex()+1);
+
                 int row=Save.executeUpdate();
                 JOptionPane.showMessageDialog(this, "Role Added!!!");
                 Con.close();
@@ -377,61 +471,48 @@ public class UserList extends javax.swing.JFrame {
             }catch(Exception ex){
                 JOptionPane.showMessageDialog(this, ex);
             }
-        
+
         }
     }//GEN-LAST:event_SaveBtnActionPerformed
 
-    private void EditoBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditoBtnActionPerformed
-        if(!(RoliCb.getSelectedIndex()==-1||EmriUseritTb.getText().isEmpty()||MbiemriUseritTb.getText().isEmpty()||EmailiUseritTb.getText().isEmpty()||UserNameTb.getText().isEmpty()||PasswordTb.getText().isEmpty())){
+    private void DeleteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteBtnActionPerformed
+        if(Key==0){
+            JOptionPane.showMessageDialog(this, "Select a User !!");
+        }else{
             try{
-                String UpdateQuery="Update RoleTbl set RoleID=?,EmriUserit=?,MbiemriUserit=?,EmailiUserit=?,UserName=?,Password=? where BID=?"+Key;
-                Con=DriverManager.getConnection("jdbc:mysql://localhost:3306/librarydb","root","");
-                PreparedStatement Save=Con.prepareStatement(UpdateQuery);
-                Save.setInt(7, Key);
-                Save.setInt(1, RoliCb.getSelectedIndex());
-                Save.setString(2, EmriUseritTb.getText()); 
-                Save.setString(3, MbiemriUseritTb.getText());
-                Save.setString(4, EmailiUseritTb.getText());
-                Save.setString(5, UserNameTb.getText());
-                Save.setString(6, PasswordTb.getText());
-                if(Save.executeUpdate()==1){
-                    DisplayUser();
-                    JOptionPane.showMessageDialog(this,"User Updated!!!");
-                }else{
-                
-                    JOptionPane.showMessageDialog(this,"Mising Information!!!");
-                }
-                
+                Con=DriverManager.getConnection("jdbc:mysql://localhost:3308/sistemipërmenaxhimineoraritprovimeve","root","");
+                String Query="Delete from Users where UserID="+Key;
+                Statement Del=Con.createStatement();
+                Del.executeUpdate(Query);
+                JOptionPane.showMessageDialog(this,"User Deleted!!!");
+                DisplayUser();
             }catch(Exception e){
-            
-      
+
             }
         }
-    }//GEN-LAST:event_EditoBtnActionPerformed
+    }//GEN-LAST:event_DeleteBtnActionPerformed
 
-    private void BackBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BackBtnActionPerformed
+    private void PasswordTbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PasswordTbActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_BackBtnActionPerformed
+    }//GEN-LAST:event_PasswordTbActionPerformed
+
+    private void UserNameTbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UserNameTbActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_UserNameTbActionPerformed
+
+    private void EmailiUseritTbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EmailiUseritTbActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_EmailiUseritTbActionPerformed
+
+    private void MbiemriUseritTbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MbiemriUseritTbActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_MbiemriUseritTbActionPerformed
+
+    private void EmriUseritTbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EmriUseritTbActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_EmriUseritTbActionPerformed
 
     int Key=0;
-    private void UserTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_UserTableMouseClicked
-        DefaultTableModel model =(DefaultTableModel) UserTable.getModel();
-        int MyIndex=UserTable.getSelectedRow();
-        Key=Integer.valueOf(model.getValueAt(MyIndex,0).toString());
-        if(RoliCb.getSelectedIndex()==-1||EmriUseritTb.getText().isEmpty()||MbiemriUseritTb.getText().isEmpty()||EmailiUseritTb.getText().isEmpty()||UserNameTb.getText().isEmpty()||PasswordTb.getText().isEmpty())
-        RoliCb.setSelectedIndex(Integer.valueOf(model.getValueAt(MyIndex, 5).toString()));
-        EmriUseritTb.setText(model.getValueAt(MyIndex,2).toString());
-        MbiemriUseritTb.setText(model.getValueAt(MyIndex,3).toString());
-        EmailiUseritTb.setText(model.getValueAt(MyIndex,3).toString());
-        UserNameTb.setText(model.getValueAt(MyIndex,3).toString());
-        PasswordTb.setText(model.getValueAt(MyIndex,3).toString());
-    }//GEN-LAST:event_UserTableMouseClicked
-
-    private void BackBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BackBtnMouseClicked
-        new MainMenu().setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_BackBtnMouseClicked
-
     /**
      * @param args the command line arguments
      */
@@ -470,17 +551,20 @@ public class UserList extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BackBtn;
     private javax.swing.JButton DeleteBtn;
+    private javax.swing.JComboBox<String> DepartamentiCb;
     private javax.swing.JButton EditoBtn;
     private javax.swing.JTextField EmailiUseritTb;
     private javax.swing.JTextField EmriUseritTb;
+    private javax.swing.JComboBox<String> FakultetiCb;
     private javax.swing.JTextField MbiemriUseritTb;
     private javax.swing.JTextField PasswordTb;
     private javax.swing.JComboBox<String> RoliCb;
     private javax.swing.JButton SaveBtn;
     private javax.swing.JTextField UserNameTb;
     private javax.swing.JTable UserTable;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -489,6 +573,5 @@ public class UserList extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField jTextField2;
     // End of variables declaration//GEN-END:variables
 }

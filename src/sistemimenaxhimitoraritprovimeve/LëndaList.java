@@ -20,13 +20,15 @@ public class LëndaList extends javax.swing.JFrame {
     public LëndaList() {
         initComponents();
         DisplayLënda();
+        UpdateDepartamenti();
+        UpdateProfesori();
     }
 
     private void DisplayLënda(){
         try{
-            Con=DriverManager.getConnection("jdbc:mysql://localhost:3306/librarydb","root","");
+            Con=DriverManager.getConnection("jdbc:mysql://localhost:3308/sistemipërmenaxhimineoraritprovimeve","root","");
             St=Con.createStatement();
-            Rs=St.executeQuery("Select * from LëndaTbl");
+            Rs=St.executeQuery("SELECT lënda.LëndaID,lënda.EmriLëndes,fakulteti.FakultetiEmri,departamenti.EmriDepartamentit,profesori.pEmri,profesori.pMbiemri FROM (((lënda INNER JOIN departamenti ON lënda.DepartamentiID = departamenti.DepartamentiID) INNER JOIN profesori ON lënda.ProfesoriID = profesori.ProfesoriID) INNER JOIN fakulteti ON departamenti.FakultetiID = fakulteti.FakultetiID);");
             LëndaTable.setModel(DbUtils.resultSetToTableModel(Rs));
         
         }catch(SQLException e){
@@ -34,7 +36,34 @@ public class LëndaList extends javax.swing.JFrame {
         
         }
     }
-    
+     public void UpdateDepartamenti(){
+        String ComboBox="select * from departamenti";
+        try{
+            Con=DriverManager.getConnection("jdbc:mysql://localhost:3308/sistemipërmenaxhimineoraritprovimeve","root","");
+            Pst=Con.prepareStatement(ComboBox);
+            Rs=Pst.executeQuery();
+            while(Rs.next()){
+               DepartamentiCb.addItem(Rs.getString("EmriDepartamentit"));
+            }
+        }
+        catch(Exception e){
+            
+        }
+    }
+     public void UpdateProfesori(){
+        String ComboBox="select * from profesori";
+        try{
+            Con=DriverManager.getConnection("jdbc:mysql://localhost:3308/sistemipërmenaxhimineoraritprovimeve","root","");
+            Pst=Con.prepareStatement(ComboBox);
+            Rs=Pst.executeQuery();
+            while(Rs.next()){
+               ProfesoriCb.addItem(Rs.getString("pEmri")+" "+Rs.getString("pMbiemri"));
+            }
+        }
+        catch(Exception e){
+            
+        }
+    }
     int LëndaID;
     private void CountLëndet(){
     
@@ -54,22 +83,18 @@ public class LëndaList extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         EmriLëndesTb = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
-        PërshkrimiLëndesTb = new javax.swing.JTextField();
-        jLabel7 = new javax.swing.JLabel();
-        SemestriTb = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
-        VitiAkademikTb = new javax.swing.JTextField();
         DeleteBtn = new javax.swing.JButton();
         SaveBtn = new javax.swing.JButton();
         EditoBtn = new javax.swing.JButton();
         BackBtn = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         LëndaTable = new javax.swing.JTable();
+        ProfesoriCb = new javax.swing.JComboBox<>();
+        DepartamentiCb = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -78,16 +103,6 @@ public class LëndaList extends javax.swing.JFrame {
 
         jLabel2.setFont(new java.awt.Font("Bahnschrift", 0, 24)); // NOI18N
         jLabel2.setText("Lëndet");
-
-        jLabel1.setText("Numri i Lëndeve është :");
-
-        jTextField2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jTextField2.setText("Search");
-        jTextField2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField2ActionPerformed(evt);
-            }
-        });
 
         jLabel5.setFont(new java.awt.Font("Bahnschrift", 0, 14)); // NOI18N
         jLabel5.setText("Emri i Lëndes");
@@ -100,34 +115,10 @@ public class LëndaList extends javax.swing.JFrame {
         });
 
         jLabel6.setFont(new java.awt.Font("Bahnschrift", 0, 14)); // NOI18N
-        jLabel6.setText("Përshkrimi i Lëndes");
-
-        PërshkrimiLëndesTb.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        PërshkrimiLëndesTb.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                PërshkrimiLëndesTbActionPerformed(evt);
-            }
-        });
-
-        jLabel7.setFont(new java.awt.Font("Bahnschrift", 0, 14)); // NOI18N
-        jLabel7.setText("Semestri");
-
-        SemestriTb.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        SemestriTb.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                SemestriTbActionPerformed(evt);
-            }
-        });
+        jLabel6.setText("Departamenti");
 
         jLabel8.setFont(new java.awt.Font("Bahnschrift", 0, 14)); // NOI18N
-        jLabel8.setText("Viti Akademik");
-
-        VitiAkademikTb.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        VitiAkademikTb.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                VitiAkademikTbActionPerformed(evt);
-            }
-        });
+        jLabel8.setText("Profesori");
 
         DeleteBtn.setText("Delete");
         DeleteBtn.addActionListener(new java.awt.event.ActionListener() {
@@ -191,20 +182,18 @@ public class LëndaList extends javax.swing.JFrame {
                 .addGap(36, 36, 36)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(EmriLëndesTb, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
-                            .addComponent(SemestriTb, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(16, 16, 16)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(EmriLëndesTb, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(PërshkrimiLëndesTb, javax.swing.GroupLayout.PREFERRED_SIZE, 301, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 697, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(9, 9, 9)
+                                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(47, 47, 47)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(VitiAkademikTb, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(ProfesoriCb, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(DepartamentiCb, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
@@ -216,106 +205,75 @@ public class LëndaList extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(BackBtn))
                             .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 421, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1035, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 149, Short.MAX_VALUE)))
-                .addContainerGap())
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1035, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(28, 28, 28)
                 .addComponent(jLabel2)
-                .addGap(28, 28, 28)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel6)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jLabel6)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(DepartamentiCb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(PërshkrimiLëndesTb, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(72, 72, 72))
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addComponent(jLabel8)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(VitiAkademikTb, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(jPanel1Layout.createSequentialGroup()
                             .addComponent(jLabel5)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(EmriLëndesTb, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(jLabel7)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(SemestriTb, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(jLabel8))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(EmriLëndesTb, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(ProfesoriCb, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(34, 34, 34)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(DeleteBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(SaveBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(EditoBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(BackBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(392, 392, 392)
-                        .addComponent(jLabel1))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 406, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(33, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 406, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(488, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addContainerGap(346, Short.MAX_VALUE))
         );
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField2ActionPerformed
-
     private void EmriLëndesTbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EmriLëndesTbActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_EmriLëndesTbActionPerformed
 
-    private void PërshkrimiLëndesTbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PërshkrimiLëndesTbActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_PërshkrimiLëndesTbActionPerformed
-
-    private void SemestriTbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SemestriTbActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_SemestriTbActionPerformed
-
-    private void VitiAkademikTbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_VitiAkademikTbActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_VitiAkademikTbActionPerformed
-
     private void SaveBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SaveBtnActionPerformed
-        if(EmriLëndesTb.getText().isEmpty()||PërshkrimiLëndesTb.getText().isEmpty()||SemestriTb.getText().isEmpty()||VitiAkademikTb.getText().isEmpty())
+        if(EmriLëndesTb.getText().isEmpty())
         {
             JOptionPane.showMessageDialog(this, "Missing Information !!!");
         }else{
             try{
                 CountLëndet();
-                Con=DriverManager.getConnection("jdbc:mysql://localhost:3306/librarydb","root","");
-                PreparedStatement Save=Con.prepareStatement("Insert into LëndetTbl values (?,?,?)");
-                Save.setInt(1, LëndaID);
-                Save.setString(2, PërshkrimiLëndesTb.getText());
-                Save.setString(3, SemestriTb.getText());
-                Save.setString(4, VitiAkademikTb.getText());
+                Con=DriverManager.getConnection("jdbc:mysql://localhost:3308/sistemipërmenaxhimineoraritprovimeve","root","");
+                PreparedStatement Save=Con.prepareStatement("Insert into lënda (EmriLëndes,DepartamentiID,ProfesoriID) values (?,?,?)");
+                Save.setString(1, EmriLëndesTb.getText());
+                Save.setInt(2, DepartamentiCb.getSelectedIndex()+1);
+                Save.setInt(3, ProfesoriCb.getSelectedIndex()+1);
                 int row=Save.executeUpdate();
                 JOptionPane.showMessageDialog(this, "Lënda Added!!!");
                 Con.close();
@@ -328,16 +286,14 @@ public class LëndaList extends javax.swing.JFrame {
     }//GEN-LAST:event_SaveBtnActionPerformed
 
     private void EditoBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditoBtnActionPerformed
-       if(!(EmriLëndesTb.getText().isEmpty()||PërshkrimiLëndesTb.getText().isEmpty()||SemestriTb.getText().isEmpty()||VitiAkademikTb.getText().isEmpty())){
+       if(!(EmriLëndesTb.getText().isEmpty())){
         try{
-                String UpdateQuery="Update LëndaTbl set EmriLëndes=?,PërshkrimiLëndes=?,Semestri=?,VitiAkademik where LëndaID=?"+Key;
-                Con=DriverManager.getConnection("jdbc:mysql://localhost:3306/librarydb","root","");
+                String UpdateQuery="Update lënda set EmriLëndes=?,DepartamentiID=?,ProfesoriID=? where LëndaID="+Key;
+                Con=DriverManager.getConnection("jdbc:mysql://localhost:3308/sistemipërmenaxhimineoraritprovimeve","root","");
                 PreparedStatement Save=Con.prepareStatement(UpdateQuery);
-                Save.setInt(4, Key);
                 Save.setString(1, EmriLëndesTb.getText());
-                Save.setString(2, PërshkrimiLëndesTb.getText());
-                Save.setString(3, SemestriTb.getText());
-                Save.setString(2, VitiAkademikTb.getText());
+                Save.setInt(2, DepartamentiCb.getSelectedIndex()+1);
+                Save.setInt(3, ProfesoriCb.getSelectedIndex()+1);
                 if(Save.executeUpdate()==1){
                     DisplayLënda();
                     JOptionPane.showMessageDialog(this,"Lënda Updated!!!");
@@ -362,11 +318,21 @@ public class LëndaList extends javax.swing.JFrame {
         DefaultTableModel model =(DefaultTableModel) LëndaTable.getModel();
         int MyIndex=LëndaTable.getSelectedRow();
         Key=Integer.valueOf(model.getValueAt(MyIndex,0).toString());
-        if(EmriLëndesTb.getText().isEmpty()||PërshkrimiLëndesTb.getText().isEmpty()||SemestriTb.getText().isEmpty()||VitiAkademikTb.getText().isEmpty())
+        if(EmriLëndesTb.getText().isEmpty())
         EmriLëndesTb.setText(model.getValueAt(MyIndex,1).toString());
-        PërshkrimiLëndesTb.setText(model.getValueAt(MyIndex,2).toString());
-        SemestriTb.setText(model.getValueAt(MyIndex,3).toString());
-        VitiAkademikTb.setText(model.getValueAt(MyIndex,4).toString());
+        String updatebox="select * from lënda where LëndaID="+Key;
+        try{
+            Con=DriverManager.getConnection("jdbc:mysql://localhost:3308/sistemipërmenaxhimineoraritprovimeve","root","");
+            Pst=Con.prepareStatement(updatebox);
+            Rs=Pst.executeQuery();
+            while(Rs.next()){
+                DepartamentiCb.setSelectedIndex(Rs.getInt("DepartamentiID")-1);
+                ProfesoriCb.setSelectedIndex(Rs.getInt("ProfesoriID")-1);
+            }
+        }
+        catch(Exception e){
+            
+        }
     }//GEN-LAST:event_LëndaTableMouseClicked
 
     private void DeleteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteBtnActionPerformed
@@ -374,8 +340,8 @@ public class LëndaList extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Select a Lënda !!");
         }else{
             try{
-                Con=DriverManager.getConnection("jdbc:mysql://localhost:3306/librarydb","root","");
-                String Query="Delete from LëndaTbl where LëndaID="+Key;
+                Con=DriverManager.getConnection("jdbc:mysql://localhost:3308/sistemipërmenaxhimineoraritprovimeve","root","");
+                String Query="Delete from Lënda where LëndaID="+Key;
                 Statement Del=Con.createStatement();
                 Del.executeUpdate(Query);
                 JOptionPane.showMessageDialog(this,"Lënda Deleted!!!");
@@ -431,21 +397,17 @@ public class LëndaList extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BackBtn;
     private javax.swing.JButton DeleteBtn;
+    private javax.swing.JComboBox<String> DepartamentiCb;
     private javax.swing.JButton EditoBtn;
     private javax.swing.JTextField EmriLëndesTb;
     private javax.swing.JTable LëndaTable;
-    private javax.swing.JTextField PërshkrimiLëndesTb;
+    private javax.swing.JComboBox<String> ProfesoriCb;
     private javax.swing.JButton SaveBtn;
-    private javax.swing.JTextField SemestriTb;
-    private javax.swing.JTextField VitiAkademikTb;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField jTextField2;
     // End of variables declaration//GEN-END:variables
 }

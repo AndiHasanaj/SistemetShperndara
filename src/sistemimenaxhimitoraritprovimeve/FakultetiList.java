@@ -19,14 +19,16 @@ public class FakultetiList extends javax.swing.JFrame {
     public FakultetiList() {
         initComponents();
         DisplayFakulteti();
-        UpdateCombo();
+        UpdateUniversiteti();
+        Updateadresa();
     }
 
     private void DisplayFakulteti(){
         try{
             Con=DriverManager.getConnection("jdbc:mysql://localhost:3308/sistemipërmenaxhimineoraritprovimeve","root","");
             St=Con.createStatement();
-            Rs=St.executeQuery("Select * from Fakulteti");
+//            Rs=St.executeQuery("Select * from Fakulteti");
+            Rs=St.executeQuery("SELECT fakulteti.FakultetiID,fakulteti.FakultetiEmri,universiteti.EmriUniversiteti,adresa.qyteti FROM ((fakulteti INNER JOIN universiteti ON fakulteti.universitetiID = universiteti.universitetiID) INNER JOIN adresa ON fakulteti.adresaID = adresa.adresaID);");
             FakultetiTable.setModel(DbUtils.resultSetToTableModel(Rs));
         
         }catch(SQLException e){
@@ -34,7 +36,7 @@ public class FakultetiList extends javax.swing.JFrame {
         
         }
     }
-    public void UpdateCombo(){
+    public void UpdateUniversiteti(){
         String ComboBox="select * from universiteti";
         try{
             Con=DriverManager.getConnection("jdbc:mysql://localhost:3308/sistemipërmenaxhimineoraritprovimeve","root","");
@@ -42,6 +44,20 @@ public class FakultetiList extends javax.swing.JFrame {
             Rs=Pst.executeQuery();
             while(Rs.next()){
                 UniversitetiCb.addItem(Rs.getString("EmriUniversiteti"));
+            }
+        }
+        catch(Exception e){
+            
+        }
+    }
+     public void Updateadresa(){
+        String ComboBox="select * from adresa";
+        try{
+            Con=DriverManager.getConnection("jdbc:mysql://localhost:3308/sistemipërmenaxhimineoraritprovimeve","root","");
+            Pst=Con.prepareStatement(ComboBox);
+            Rs=Pst.executeQuery();
+            while(Rs.next()){
+                AdresaCb.addItem(Rs.getString("Qyteti"));
             }
         }
         catch(Exception e){
@@ -69,8 +85,6 @@ public class FakultetiList extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         EmriFakultetitTb = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
@@ -91,16 +105,6 @@ public class FakultetiList extends javax.swing.JFrame {
 
         jLabel2.setFont(new java.awt.Font("Bahnschrift", 0, 24)); // NOI18N
         jLabel2.setText("Fakulteti");
-
-        jLabel1.setText("Numri i Fakulteteve është :");
-
-        jTextField2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jTextField2.setText("Search");
-        jTextField2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField2ActionPerformed(evt);
-            }
-        });
 
         jLabel5.setFont(new java.awt.Font("Bahnschrift", 0, 14)); // NOI18N
         jLabel5.setText("Emri i Fakultetit");
@@ -128,6 +132,12 @@ public class FakultetiList extends javax.swing.JFrame {
 
         jLabel7.setFont(new java.awt.Font("Bahnschrift", 0, 14)); // NOI18N
         jLabel7.setText("Adresa");
+
+        AdresaCb.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AdresaCbActionPerformed(evt);
+            }
+        });
 
         SaveBtn.setText("Save");
         SaveBtn.addActionListener(new java.awt.event.ActionListener() {
@@ -196,14 +206,12 @@ public class FakultetiList extends javax.swing.JFrame {
                             .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(AdresaCb, javax.swing.GroupLayout.Alignment.LEADING, 0, 300, Short.MAX_VALUE)
                             .addComponent(EmriFakultetitTb, javax.swing.GroupLayout.Alignment.LEADING))
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(UniversitetiCb, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 102, Short.MAX_VALUE)
-                                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 321, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(UniversitetiCb, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(26, 26, 26)
                                 .addComponent(DeleteBtn)
@@ -212,33 +220,24 @@ public class FakultetiList extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(EditoBtn)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(BackBtn)
-                                .addGap(0, 0, Short.MAX_VALUE))))
+                                .addComponent(BackBtn))))
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 421, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1035, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(12, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1035, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(169, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(28, 28, 28)
                 .addComponent(jLabel2)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(28, 28, 28)
-                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(24, 24, 24)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel6))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(UniversitetiCb)
-                            .addComponent(EmriFakultetitTb, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE))))
+                .addGap(24, 24, 24)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(jLabel6))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(UniversitetiCb)
+                    .addComponent(EmriFakultetitTb, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -248,15 +247,9 @@ public class FakultetiList extends javax.swing.JFrame {
                     .addComponent(EditoBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(BackBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(DeleteBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel1)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 406, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(377, Short.MAX_VALUE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 406, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(38, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -276,10 +269,6 @@ public class FakultetiList extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField2ActionPerformed
-
     private void EmriFakultetitTbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EmriFakultetitTbActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_EmriFakultetitTbActionPerformed
@@ -292,11 +281,10 @@ public class FakultetiList extends javax.swing.JFrame {
             try{
                 CountFakultetet();
                 Con=DriverManager.getConnection("jdbc:mysql://localhost:3308/sistemipërmenaxhimineoraritprovimeve","root","");
-                PreparedStatement Save=Con.prepareStatement("Insert into FakultetiTbl values (?,?,?)");
-                Save.setInt(1, FakultetiID);
-                Save.setString(2, EmriFakultetitTb.getText());
-                Save.setInt(3, UniversitetiCb.getSelectedIndex());
-                Save.setInt(4, AdresaCb.getSelectedIndex());
+                PreparedStatement Save=Con.prepareStatement("Insert into Fakulteti (FakultetiEmri,UniversitetiID,AdresaID) values (?,?,?)");
+                Save.setString(1, EmriFakultetitTb.getText());
+                Save.setInt(2, UniversitetiCb.getSelectedIndex()+1);
+                Save.setInt(3, AdresaCb.getSelectedIndex()+1);
                 int row=Save.executeUpdate();
                 JOptionPane.showMessageDialog(this, "Fakulteti Added!!!");
                 Con.close();
@@ -311,13 +299,12 @@ public class FakultetiList extends javax.swing.JFrame {
     private void EditoBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditoBtnActionPerformed
         if(!(EmriFakultetitTb.getText().isEmpty()||UniversitetiCb.getSelectedIndex()==-1||AdresaCb.getSelectedIndex()==-1)){
              try{
-                String UpdateQuery="Update FakultetTbl set EmriFakultetit=?,UniversitetiID=?,AdresaID=? where FakultetiID=?"+Key;
-                Con=DriverManager.getConnection("jdbc:mysql://localhost:3306/librarydb","root","");
+                String UpdateQuery="Update fakulteti set FakultetiEmri=?,UniversitetiID=?,AdresaID=? where FakultetiID="+Key;
+                Con=DriverManager.getConnection("jdbc:mysql://localhost:3308/sistemipërmenaxhimineoraritprovimeve","root","");
                 PreparedStatement Save=Con.prepareStatement(UpdateQuery);
-                Save.setInt(4, Key);
                 Save.setString(1, EmriFakultetitTb.getText());
-                Save.setInt(2, UniversitetiCb.getSelectedIndex());
-                Save.setInt(3, AdresaCb.getSelectedIndex());
+                Save.setInt(2, UniversitetiCb.getSelectedIndex()+1);
+                Save.setInt(3, AdresaCb.getSelectedIndex()+1);
                 if(Save.executeUpdate()==1){
                     DisplayFakulteti();
                     JOptionPane.showMessageDialog(this,"Fakulteti Updated!!!");
@@ -345,8 +332,23 @@ public class FakultetiList extends javax.swing.JFrame {
         Key=Integer.valueOf(model.getValueAt(MyIndex,0).toString());
         if(EmriFakultetitTb.getText().isEmpty()||UniversitetiCb.getSelectedIndex()==-1||AdresaCb.getSelectedIndex()==-1)
         EmriFakultetitTb.setText(model.getValueAt(MyIndex,1).toString());
-        UniversitetiCb.setSelectedIndex(Integer.valueOf(model.getValueAt(MyIndex,2).toString()));
-        AdresaCb.setSelectedIndex(Integer.valueOf(model.getValueAt(MyIndex,3).toString()));
+        
+        String updatebox="select * from fakulteti where FakultetiID="+Key;
+        try{
+            Con=DriverManager.getConnection("jdbc:mysql://localhost:3308/sistemipërmenaxhimineoraritprovimeve","root","");
+            Pst=Con.prepareStatement(updatebox);
+            Rs=Pst.executeQuery();
+            while(Rs.next()){
+                UniversitetiCb.setSelectedIndex(Rs.getInt("UniversitetiID")-1);
+                AdresaCb.setSelectedIndex(Rs.getInt("AdresaID")-1);
+            }
+        }
+        catch(Exception e){
+            
+        }
+        
+        
+        
     }//GEN-LAST:event_FakultetiTableMouseClicked
 
     private void DeleteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteBtnActionPerformed
@@ -354,8 +356,8 @@ public class FakultetiList extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Select a Fakultet !!");
         }else{
             try{
-                Con=DriverManager.getConnection("jdbc:mysql://localhost:3306/librarydb","root","");
-                String Query="Delete from FakultetTbl where FakultetiID="+Key;
+                Con=DriverManager.getConnection("jdbc:mysql://localhost:3308/sistemipërmenaxhimineoraritprovimeve","root","");
+                String Query="Delete from fakulteti where FakultetiID="+Key;
                 Statement Del=Con.createStatement();
                 Del.executeUpdate(Query);
                 JOptionPane.showMessageDialog(this,"Fakultet Deleted!!!");
@@ -379,6 +381,10 @@ public class FakultetiList extends javax.swing.JFrame {
 
     private void UniversitetiCbFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_UniversitetiCbFocusGained
     }//GEN-LAST:event_UniversitetiCbFocusGained
+
+    private void AdresaCbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AdresaCbActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_AdresaCbActionPerformed
 
     /**
      * @param args the command line arguments
@@ -424,13 +430,11 @@ public class FakultetiList extends javax.swing.JFrame {
     private javax.swing.JTable FakultetiTable;
     private javax.swing.JButton SaveBtn;
     private javax.swing.JComboBox<String> UniversitetiCb;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField jTextField2;
     // End of variables declaration//GEN-END:variables
 }
