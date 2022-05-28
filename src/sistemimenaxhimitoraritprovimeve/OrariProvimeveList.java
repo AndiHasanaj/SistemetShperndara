@@ -7,6 +7,9 @@ import java.sql.Statement;
 import javax.swing.JOptionPane;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import javax.swing.table.DefaultTableModel;
 import net.proteanit.sql.DbUtils;
 
@@ -20,18 +23,51 @@ public class OrariProvimeveList extends javax.swing.JFrame {
     public OrariProvimeveList() {
         initComponents();
         DisplayOrariProvimeve();
+        UpdateUniversiteti();
     }
 
     private void DisplayOrariProvimeve(){
         try{
-            Con=DriverManager.getConnection("jdbc:mysql://localhost:3306/librarydb","root","");
+            Con=DriverManager.getConnection("jdbc:mysql://localhost:3308/sistemipërmenaxhimineoraritprovimeve","root","");
             St=Con.createStatement();
-            Rs=St.executeQuery("Select * from OrariProvimeveTbl");
+//            Rs=St.executeQuery("Select * from OrariProvimeve");
+              Rs=St.executeQuery("SELECT OrariProvimeve.OrariID,lënda.EmriLëndes, profesori.pEmri,profesori.pMbiemri,afati.AfatiEmri,OrariProvimeve.DataProvimit FROM (((OrariProvimeve INNER JOIN lënda ON OrariProvimeve.LëndaID = lënda.LëndaID) INNER JOIN profesori ON OrariProvimeve.ProfesoriID = profesori.ProfesoriID) INNER JOIN afati ON OrariProvimeve.AfatiID = afati.AfatiID);");
+//            SELECT OrariProvimeve.OrariID,lënda.EmriLëndes, profesori.pEmri,afati.AfatiEmri
+//            FROM (((OrariProvimeve
+//            INNER JOIN lënda ON OrariProvimeve.LëndaID = lënda.LëndaID)
+//            INNER JOIN profesori ON OrariProvimeve.ProfesoriID = profesori.ProfesoriID)
+//            INNER JOIN afato ON OrariProvimeve.AfatiID = afati.AfatiID);
             OrariProvimeveTable.setModel(DbUtils.resultSetToTableModel(Rs));
         
         }catch(SQLException e){
         
         
+        }
+    }
+    public void UpdateUniversiteti(){
+        String ComboBox="select * from lënda";
+        String ComboBox1="select * from profesori";
+        String ComboBox2="select * from afati";
+        try{
+            Con=DriverManager.getConnection("jdbc:mysql://localhost:3308/sistemipërmenaxhimineoraritprovimeve","root","");
+            Pst=Con.prepareStatement(ComboBox);
+            Rs=Pst.executeQuery();
+            while(Rs.next()){
+                LëndaCb.addItem(Rs.getString("EmriLëndes"));
+            }
+            Pst=Con.prepareStatement(ComboBox1);
+            Rs=Pst.executeQuery();
+            while(Rs.next()){
+                ProfesoriCb.addItem(Rs.getString("pEmri")+" "+Rs.getString("pMbiemri"));
+            }
+            Pst=Con.prepareStatement(ComboBox2);
+            Rs=Pst.executeQuery();
+            while(Rs.next()){
+                AfatiCb.addItem(Rs.getString("AfatiEmri"));
+            }
+        }
+        catch(Exception e){
+            
         }
     }
     
@@ -40,7 +76,7 @@ public class OrariProvimeveList extends javax.swing.JFrame {
     
         try{
             St1=Con.createStatement();
-            Rs1=St1.executeQuery("Select Max(OrariProvimeveID) from OrariProvimeveTbl");
+            Rs1=St1.executeQuery("Select Max(OrariProvimeveID) from OrariProvimeve");
             Rs1.next();
             OrariProvimeveID=Rs1.getInt(1)+1;
         }catch(SQLException e){
@@ -54,8 +90,6 @@ public class OrariProvimeveList extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         ProfesoriCb = new javax.swing.JComboBox<>();
@@ -78,16 +112,6 @@ public class OrariProvimeveList extends javax.swing.JFrame {
 
         jLabel2.setFont(new java.awt.Font("Bahnschrift", 0, 24)); // NOI18N
         jLabel2.setText("Orari i Provimeve");
-
-        jLabel1.setText("Numri i Lëndeve është :");
-
-        jTextField2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jTextField2.setText("Search");
-        jTextField2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField2ActionPerformed(evt);
-            }
-        });
 
         jLabel5.setFont(new java.awt.Font("Bahnschrift", 0, 14)); // NOI18N
         jLabel5.setText("Lënda");
@@ -171,10 +195,7 @@ public class OrariProvimeveList extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(BackBtn))
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 421, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1035, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1035, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -186,9 +207,7 @@ public class OrariProvimeveList extends javax.swing.JFrame {
                             .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(ProfesoriCb, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(DataProvimitTb, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE))
-                        .addGap(93, 93, 93)
-                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 630, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(DataProvimitTb, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -204,7 +223,6 @@ public class OrariProvimeveList extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(ProfesoriCb, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(70, 70, 70))
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                         .addGroup(jPanel1Layout.createSequentialGroup()
                             .addComponent(jLabel7)
@@ -223,13 +241,8 @@ public class OrariProvimeveList extends javax.swing.JFrame {
                     .addComponent(SaveBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(EditoBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(BackBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(394, 394, 394)
-                        .addComponent(jLabel1))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 406, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 406, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(17, Short.MAX_VALUE))
         );
 
@@ -250,17 +263,13 @@ public class OrariProvimeveList extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField2ActionPerformed
-
     private void DeleteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteBtnActionPerformed
         if(Key==0){
             JOptionPane.showMessageDialog(this, "Select a OrariProvimeve !!");
         }else{
             try{
-                Con=DriverManager.getConnection("jdbc:mysql://localhost:3306/librarydb","root","");
-                String Query="Delete from OrariProvimeveTbl where OrariProvimeveID="+Key;
+                Con=DriverManager.getConnection("jdbc:mysql://localhost:3308/sistemipërmenaxhimineoraritprovimeve","root","");
+                String Query="Delete from OrariProvimeve where OrariID="+Key;
                 Statement Del=Con.createStatement();
                 Del.executeUpdate(Query);
                 JOptionPane.showMessageDialog(this,"OrariProvimeve Deleted!!!");
@@ -273,41 +282,47 @@ public class OrariProvimeveList extends javax.swing.JFrame {
     }//GEN-LAST:event_DeleteBtnActionPerformed
 
     private void SaveBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SaveBtnActionPerformed
-        if(LëndaCb.getSelectedIndex()==-1||ProfesoriCb.getSelectedIndex()==-1||AfatiCb.getSelectedIndex()==-1||DataProvimitTb.getText().isEmpty())
-        {
-            JOptionPane.showMessageDialog(this, "Missing Information !!!");
-        }else{
+
             try{
                 CountOrariProvimeve();
-                Con=DriverManager.getConnection("jdbc:mysql://localhost:3306/librarydb","root","");
-                PreparedStatement Save=Con.prepareStatement("Insert into OrariProvimeveTbl values (?,?,?)");
-                Save.setInt(1, OrariProvimeveID);
-                Save.setInt(2, LëndaCb.getSelectedIndex());
-                Save.setInt(3, ProfesoriCb.getSelectedIndex());
-                Save.setInt(4, AfatiCb.getSelectedIndex());
-                Save.setString(5, DataProvimitTb);
+                Con=DriverManager.getConnection("jdbc:mysql://localhost:3308/sistemipërmenaxhimineoraritprovimeve","root","");
+                PreparedStatement Save=Con.prepareStatement("Insert into OrariProvimeve (LëndaID,ProfesoriID,AfatiID,DataProvimit)values (?,?,?,?)");
+                Save.setInt(1, LëndaCb.getSelectedIndex()+1);
+                Save.setInt(2, ProfesoriCb.getSelectedIndex()+1);
+                Save.setInt(3, AfatiCb.getSelectedIndex()+1);
+//                Save.setString(4, DataProvimitTb.getDate().toString());
+                DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                Date DataProvimit = DataProvimitTb.getDate();
+                
+                String strDataProvimit = dateFormat.format(DataProvimit);
+                Save.setString(4, strDataProvimit);
+                
                 int row=Save.executeUpdate();
                 JOptionPane.showMessageDialog(this, "OrariProvimit Added!!!");
                 Con.close();
-                DisplayOrariProvimit();
+                DisplayOrariProvimeve();
             }catch(Exception ex){
                 JOptionPane.showMessageDialog(this, ex);
             }
         
-        }
+        
     }//GEN-LAST:event_SaveBtnActionPerformed
 
     private void EditoBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditoBtnActionPerformed
         if(!(LëndaCb.getSelectedIndex()==-1||ProfesoriCb.getSelectedIndex()==-1||AfatiCb.getSelectedIndex()==-1)){
             try{
-                String UpdateQuery="Update OrariProvimitTbl set LëndaID=?,ProfesoriID=?,AfatiID=?,DataProvimit=? where OrariProvimitID=?"+Key;
-                Con=DriverManager.getConnection("jdbc:mysql://localhost:3306/librarydb","root","");
+                String UpdateQuery="Update OrariProvimeve set LëndaID=?,ProfesoriID=?,AfatiID=?,DataProvimit=? where OrariID="+Key;
+                Con=DriverManager.getConnection("jdbc:mysql://localhost:3308/sistemipërmenaxhimineoraritprovimeve","root","");
                 PreparedStatement Save=Con.prepareStatement(UpdateQuery);
-                Save.setInt(4, Key);
-                Save.setInt(1, LëndaCb.getSelectedIndex());
-                Save.setInt(2, ProfesoriCb.getSelectedIndex());
-                Save.setInt(3, AfatiCb.getSelectedIndex());
-                Save.setString(4,DataProvimitTb.getDate().toString());
+                Save.setInt(1, LëndaCb.getSelectedIndex()+1);
+                Save.setInt(2, ProfesoriCb.getSelectedIndex()+1);
+                Save.setInt(3, AfatiCb.getSelectedIndex()+1);
+                DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                Date DataProvimit = DataProvimitTb.getDate();
+                
+                String strDataProvimit = dateFormat.format(DataProvimit);
+                Save.setString(4, strDataProvimit);
+                
                 if(Save.executeUpdate()==1){
                     DisplayOrariProvimeve();
                     JOptionPane.showMessageDialog(this,"OrariProvimit Updated!!!");
@@ -332,11 +347,25 @@ public class OrariProvimeveList extends javax.swing.JFrame {
         DefaultTableModel model =(DefaultTableModel) OrariProvimeveTable.getModel();
         int MyIndex=OrariProvimeveTable.getSelectedRow();
         Key=Integer.valueOf(model.getValueAt(MyIndex,0).toString());
-        if(LëndaCb.getSelectedIndex()==-1||ProfesoriCb.getSelectedIndex()==-1||AfatiCb.getSelectedIndex()==-1)
-        LëndaCb.setSelectedIndex(Integer.valueOf(model.getValueAt(MyIndex,1).toString()));
-        ProfesoriCb.setSelectedIndex(Integer.valueOf(model.getValueAt(MyIndex,2).toString()));
-        AfatiCb.setSelectedIndex(Integer.valueOf(model.getValueAt(MyIndex,3).toString()));
-        DataProvimitTb.setText(model.getValueAt(MyIndex,4).toString());
+//        LëndaCb.setSelectedIndex(Integer.valueOf(model.getValueAt(MyIndex,1).toString()));
+//        ProfesoriCb.setSelectedIndex(Integer.valueOf(model.getValueAt(MyIndex,2).toString()));
+//        AfatiCb.setSelectedIndex(Integer.valueOf(model.getValueAt(MyIndex,3).toString()));
+        String sDate1=model.getValueAt(MyIndex,4).toString();
+        String updatebox="select * from OrariProvimeve where OrariID="+Key;
+        try{
+            Con=DriverManager.getConnection("jdbc:mysql://localhost:3308/sistemipërmenaxhimineoraritprovimeve","root","");
+            Pst=Con.prepareStatement(updatebox);
+            Rs=Pst.executeQuery();
+            while(Rs.next()){
+                LëndaCb.setSelectedIndex(Rs.getInt("LëndaID")-1);
+                ProfesoriCb.setSelectedIndex(Rs.getInt("ProfesoriID")-1);
+                AfatiCb.setSelectedIndex(Rs.getInt("AfatiID")-1);
+
+            }
+        }catch(Exception ex){
+        
+        }
+        
     }//GEN-LAST:event_OrariProvimeveTableMouseClicked
 
     private void BackBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BackBtnMouseClicked
@@ -389,7 +418,6 @@ public class OrariProvimeveList extends javax.swing.JFrame {
     private javax.swing.JTable OrariProvimeveTable;
     private javax.swing.JComboBox<String> ProfesoriCb;
     private javax.swing.JButton SaveBtn;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -397,6 +425,5 @@ public class OrariProvimeveList extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField jTextField2;
     // End of variables declaration//GEN-END:variables
 }

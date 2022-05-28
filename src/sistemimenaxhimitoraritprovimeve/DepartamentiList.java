@@ -18,18 +18,34 @@ public class DepartamentiList extends javax.swing.JFrame {
     public DepartamentiList() {
         initComponents();
         DisplayDepartamenti();
+        UpdateFakulteti();
     }
 
     private void DisplayDepartamenti(){
         try{
-            Con=DriverManager.getConnection("jdbc:mysql://localhost:3306/librarydb","root","");
+            Con=DriverManager.getConnection("jdbc:mysql://localhost:3308/sistemipërmenaxhimineoraritprovimeve","root","");
             St=Con.createStatement();
-            Rs=St.executeQuery("Select * from DepartamentiTbl");
+            Rs=St.executeQuery("SELECT departamenti.DepartamentiID,departamenti.EmriDepartamentit,fakulteti.FakultetiEmri FROM departamenti INNER JOIN fakulteti ON departamenti.fakultetiID = fakulteti.fakultetiID;");
             DepartamentiTable.setModel(DbUtils.resultSetToTableModel(Rs));
         
         }catch(SQLException e){
         
         
+        }
+    }
+    
+    public void UpdateFakulteti(){
+        String ComboBox="select * from fakulteti";
+        try{
+            Con=DriverManager.getConnection("jdbc:mysql://localhost:3308/sistemipërmenaxhimineoraritprovimeve","root","");
+            Pst=Con.prepareStatement(ComboBox);
+            Rs=Pst.executeQuery();
+            while(Rs.next()){
+                FakultetiCb.addItem(Rs.getString("FakultetiEmri"));
+            }
+        }
+        catch(Exception e){
+            
         }
     }
     
@@ -53,8 +69,6 @@ public class DepartamentiList extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         EmriDepartamentitTb = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
@@ -73,16 +87,6 @@ public class DepartamentiList extends javax.swing.JFrame {
 
         jLabel2.setFont(new java.awt.Font("Bahnschrift", 0, 24)); // NOI18N
         jLabel2.setText("Departamenti");
-
-        jLabel1.setText("Numri i Departamenteve është :");
-
-        jTextField2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jTextField2.setText("Search");
-        jTextField2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField2ActionPerformed(evt);
-            }
-        });
 
         jLabel5.setFont(new java.awt.Font("Bahnschrift", 0, 14)); // NOI18N
         jLabel5.setText("Emri i Departamentit");
@@ -176,12 +180,9 @@ public class DepartamentiList extends javax.swing.JFrame {
                                 .addGap(18, 18, 18)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                     .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(FakultetiCb, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(156, 156, 156)
-                                .addComponent(jTextField2, javax.swing.GroupLayout.DEFAULT_SIZE, 255, Short.MAX_VALUE))
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 421, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(12, Short.MAX_VALUE))))
+                                    .addComponent(FakultetiCb, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 421, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(423, Short.MAX_VALUE))))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1035, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -193,16 +194,13 @@ public class DepartamentiList extends javax.swing.JFrame {
                 .addGap(28, 28, 28)
                 .addComponent(jLabel2)
                 .addGap(28, 28, 28)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel6))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(EmriDepartamentitTb, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(FakultetiCb, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(jLabel6))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(EmriDepartamentitTb, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(FakultetiCb, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(SaveBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -211,9 +209,7 @@ public class DepartamentiList extends javax.swing.JFrame {
                     .addComponent(DeleteBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 406, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addContainerGap(25, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -226,16 +222,12 @@ public class DepartamentiList extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(0, 63, Short.MAX_VALUE))
         );
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField2ActionPerformed
 
     private void EmriDepartamentitTbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EmriDepartamentitTbActionPerformed
         // TODO add your handling code here:
@@ -248,11 +240,10 @@ public class DepartamentiList extends javax.swing.JFrame {
         }else{
             try{
                 CountDepartamentet();
-                Con=DriverManager.getConnection("jdbc:mysql://localhost:3306/librarydb","root","");
-                PreparedStatement Save=Con.prepareStatement("Insert into AdresaTbl values (?,?,?)");
-                Save.setInt(1, DepartamentiID);
-                Save.setString(2, EmriDepartamentitTb.getText());
-                Save.setInt(3, FakultetiCb.getSelectedIndex()+1);
+                Con=DriverManager.getConnection("jdbc:mysql://localhost:3308/sistemipërmenaxhimineoraritprovimeve","root","");
+                PreparedStatement Save=Con.prepareStatement("Insert into departamenti (EmriDepartamentit,FakultetiID) values (?,?)");
+                Save.setString(1, EmriDepartamentitTb.getText());
+                Save.setInt(2, FakultetiCb.getSelectedIndex()+1);
                 int row=Save.executeUpdate();
                 JOptionPane.showMessageDialog(this, "Departament Added!!!");
                 Con.close();
@@ -267,15 +258,14 @@ public class DepartamentiList extends javax.swing.JFrame {
     private void EditoBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditoBtnActionPerformed
         if(!(EmriDepartamentitTb.getText().isEmpty()||FakultetiCb.getSelectedIndex()==-1)){
             try{
-                String UpdateQuery="Update BookTbl set BName=?,Author=?,Price=? where BID=?"+Key;
-                Con=DriverManager.getConnection("jdbc:mysql://localhost:3306/librarydb","root","");
+                String UpdateQuery="Update departamenti set EmriDepartamentit=?,FakultetiID=? where DepartamentiID="+Key;
+                Con=DriverManager.getConnection("jdbc:mysql://localhost:3308/sistemipërmenaxhimineoraritprovimeve","root","");
                 PreparedStatement Save=Con.prepareStatement(UpdateQuery);
-                Save.setInt(4, Key);
                 Save.setString(1, EmriDepartamentitTb.getText());
-                Save.setInt(2, FakultetiCb.getSelectedIndex());
+                Save.setInt(2, FakultetiCb.getSelectedIndex()+1);
                 if(Save.executeUpdate()==1){
                     DisplayDepartamenti();
-                    JOptionPane.showMessageDialog(this,"Book Updated!!!");
+                    JOptionPane.showMessageDialog(this,"Departamenti Updated!!!");
                 }else{
                 
                     JOptionPane.showMessageDialog(this,"Mising Information!!!");
@@ -299,7 +289,20 @@ public class DepartamentiList extends javax.swing.JFrame {
         Key=Integer.valueOf(model.getValueAt(MyIndex,0).toString());
         if(EmriDepartamentitTb.getText().isEmpty()||FakultetiCb.getSelectedIndex()==-1)
         EmriDepartamentitTb.setText(model.getValueAt(MyIndex,1).toString());
-        FakultetiCb.setSelectedIndex(Integer.valueOf(model.getValueAt(MyIndex, 2).toString()));
+        
+        String updatebox="select * from fakulteti where DepartamentiID="+Key;
+        try{
+            Con=DriverManager.getConnection("jdbc:mysql://localhost:3308/sistemipërmenaxhimineoraritprovimeve","root","");
+            Pst=Con.prepareStatement(updatebox);
+            Rs=Pst.executeQuery();
+            while(Rs.next()){
+                FakultetiCb.setSelectedIndex(Rs.getInt("Fakulteti")-1);
+                
+            }
+        }
+        catch(Exception e){
+            
+        }
     }//GEN-LAST:event_DepartamentiTableMouseClicked
 
     private void DeleteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteBtnActionPerformed
@@ -307,8 +310,8 @@ public class DepartamentiList extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Select a Departament !!");
         }else{
             try{
-                Con=DriverManager.getConnection("jdbc:mysql://localhost:3306/librarydb","root","");
-                String Query="Delete from DepartamentTbl where DepartamentID="+Key;
+                Con=DriverManager.getConnection("jdbc:mysql://localhost:3308/sistemipërmenaxhimineoraritprovimeve","root","");
+                String Query="Delete from departamenti where DepartamentiID="+Key;
                 Statement Del=Con.createStatement();
                 Del.executeUpdate(Query);
                 JOptionPane.showMessageDialog(this,"Departament Deleted!!!");
@@ -371,12 +374,10 @@ public class DepartamentiList extends javax.swing.JFrame {
     private javax.swing.JTextField EmriDepartamentitTb;
     private javax.swing.JComboBox<String> FakultetiCb;
     private javax.swing.JButton SaveBtn;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField jTextField2;
     // End of variables declaration//GEN-END:variables
 }

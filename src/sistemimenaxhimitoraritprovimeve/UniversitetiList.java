@@ -23,9 +23,9 @@ public class UniversitetiList extends javax.swing.JFrame {
 
     private void DisplayUniversiteti(){
         try{
-            Con=DriverManager.getConnection("jdbc:mysql://localhost:3306/librarydb","root","");
+            Con=DriverManager.getConnection("jdbc:mysql://localhost:3308/sistemipërmenaxhimineoraritprovimeve","root","");
             St=Con.createStatement();
-            Rs=St.executeQuery("Select * from UniversitetiTbl");
+            Rs=St.executeQuery("Select * from universiteti");
             UniversitetiTable.setModel(DbUtils.resultSetToTableModel(Rs));
         
         }catch(SQLException e){
@@ -52,8 +52,6 @@ public class UniversitetiList extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         EmriUniversitetiTb = new javax.swing.JTextField();
         DeleteBtn = new javax.swing.JButton();
@@ -70,16 +68,6 @@ public class UniversitetiList extends javax.swing.JFrame {
 
         jLabel2.setFont(new java.awt.Font("Bahnschrift", 0, 24)); // NOI18N
         jLabel2.setText("Universiteti");
-
-        jLabel1.setText("Numri i Lëndeve është :");
-
-        jTextField2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jTextField2.setText("Search");
-        jTextField2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField2ActionPerformed(evt);
-            }
-        });
 
         jLabel5.setFont(new java.awt.Font("Bahnschrift", 0, 14)); // NOI18N
         jLabel5.setText("Emri i Universitetit");
@@ -150,29 +138,24 @@ public class UniversitetiList extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(36, 36, 36)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(36, 36, 36)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(DeleteBtn)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(SaveBtn)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(EditoBtn)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(BackBtn))
-                                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(EmriUniversitetiTb, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(435, 435, 435)
-                                .addComponent(jTextField2, javax.swing.GroupLayout.DEFAULT_SIZE, 276, Short.MAX_VALUE))
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 421, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1035, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addComponent(DeleteBtn)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(SaveBtn)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(EditoBtn)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(BackBtn))
+                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(EmriUniversitetiTb, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 421, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(620, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1035, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -180,26 +163,19 @@ public class UniversitetiList extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(28, 28, 28)
                 .addComponent(jLabel2)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(28, 28, 28)
-                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel5)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(EmriUniversitetiTb, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(DeleteBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(SaveBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(EditoBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(BackBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(18, 18, 18)
+                .addComponent(jLabel5)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(EmriUniversitetiTb, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(DeleteBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(SaveBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(EditoBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(BackBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 406, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addContainerGap(25, Short.MAX_VALUE))
+                .addContainerGap(79, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -219,10 +195,6 @@ public class UniversitetiList extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField2ActionPerformed
-
     private void EmriUniversitetiTbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EmriUniversitetiTbActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_EmriUniversitetiTbActionPerformed
@@ -232,8 +204,8 @@ public class UniversitetiList extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Select a Universitet !!");
         }else{
             try{
-                Con=DriverManager.getConnection("jdbc:mysql://localhost:3306/librarydb","root","");
-                String Query="Delete from UniversitetiTbl where UniversitetiID="+Key;
+                Con=DriverManager.getConnection("jdbc:mysql://localhost:3308/sistemipërmenaxhimineoraritprovimeve","root","");
+                String Query="Delete from universiteti where UniversitetiID="+Key;
                 Statement Del=Con.createStatement();
                 Del.executeUpdate(Query);
                 JOptionPane.showMessageDialog(this,"Universiteti Deleted!!!");
@@ -252,10 +224,9 @@ public class UniversitetiList extends javax.swing.JFrame {
         }else{
             try{
                 CountUniversiteti();
-                Con=DriverManager.getConnection("jdbc:mysql://localhost:3306/librarydb","root","");
-                PreparedStatement Save=Con.prepareStatement("Insert into UniversitetiTbl values (?,?,?)");
-                Save.setInt(1, UniversitetiID);
-                Save.setString(2, EmriUniversitetiTb.getText());
+                Con=DriverManager.getConnection("jdbc:mysql://localhost:3308/sistemipërmenaxhimineoraritprovimeve","root","");
+                PreparedStatement Save=Con.prepareStatement("Insert into universiteti (EmriUniversiteti) values (?)");
+                Save.setString(1, EmriUniversitetiTb.getText());
                 int row=Save.executeUpdate();
                 JOptionPane.showMessageDialog(this, "Universiteti Added!!!");
                 Con.close();
@@ -270,10 +241,9 @@ public class UniversitetiList extends javax.swing.JFrame {
     private void EditoBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditoBtnActionPerformed
         if(!(EmriUniversitetiTb.getText().isEmpty())){
             try{
-                String UpdateQuery="Update UniversitetTbl set EmriUniversiteti=? where BID=?"+Key;
-                Con=DriverManager.getConnection("jdbc:mysql://localhost:3306/librarydb","root","");
+                String UpdateQuery="Update Universiteti set EmriUniversiteti=? where UniversitetiID="+Key;
+                Con=DriverManager.getConnection("jdbc:mysql://localhost:3308/sistemipërmenaxhimineoraritprovimeve","root","");
                 PreparedStatement Save=Con.prepareStatement(UpdateQuery);
-                Save.setInt(2, Key);
                 Save.setString(1, EmriUniversitetiTb.getText());
                 if(Save.executeUpdate()==1){
                     DisplayUniversiteti();
@@ -351,11 +321,9 @@ public class UniversitetiList extends javax.swing.JFrame {
     private javax.swing.JTextField EmriUniversitetiTb;
     private javax.swing.JButton SaveBtn;
     private javax.swing.JTable UniversitetiTable;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField jTextField2;
     // End of variables declaration//GEN-END:variables
 }

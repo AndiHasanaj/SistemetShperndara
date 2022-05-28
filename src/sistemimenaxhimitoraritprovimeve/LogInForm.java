@@ -13,15 +13,17 @@ import javax.swing.table.DefaultTableModel;
 import net.proteanit.sql.DbUtils;
 
 public class LogInForm extends javax.swing.JFrame {
-
+//    public static String username="";
+//    public static String password="";
     Connection Con=null;
     PreparedStatement Pst=null;
     ResultSet Rs=null,Rs1=null;
     Statement St=null,St1=null;
     public LogInForm() {
         initComponents();
+        
     }
-
+    public static String username;
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -34,26 +36,25 @@ public class LogInForm extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        UNameTb = new javax.swing.JTextField();
+        UsernameTb = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         PasswordTb = new javax.swing.JPasswordField();
         SignInBtn = new javax.swing.JButton();
         XBtn = new javax.swing.JLabel();
-        AdminBtn = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
         setUndecorated(true);
 
-        jPanel1.setBackground(new java.awt.Color(51, 0, 255));
+        jPanel1.setBackground(new java.awt.Color(204, 204, 255));
         jPanel1.setToolTipText("");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 227, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -66,10 +67,10 @@ public class LogInForm extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("Bahnschrift", 0, 18)); // NOI18N
         jLabel3.setText("LogIn");
 
-        UNameTb.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        UNameTb.addActionListener(new java.awt.event.ActionListener() {
+        UsernameTb.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        UsernameTb.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                UNameTbActionPerformed(evt);
+                UsernameTbActionPerformed(evt);
             }
         });
 
@@ -79,7 +80,11 @@ public class LogInForm extends javax.swing.JFrame {
         jLabel7.setFont(new java.awt.Font("Bahnschrift", 0, 18)); // NOI18N
         jLabel7.setText("Password");
 
-        PasswordTb.setText("jPasswordField1");
+        PasswordTb.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                PasswordTbActionPerformed(evt);
+            }
+        });
 
         SignInBtn.setText("SignIn");
         SignInBtn.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -101,43 +106,31 @@ public class LogInForm extends javax.swing.JFrame {
             }
         });
 
-        AdminBtn.setText("Admin");
-        AdminBtn.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                AdminBtnMouseClicked(evt);
-            }
-        });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 132, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 76, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(UsernameTb)
+                            .addComponent(PasswordTb))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 133, Short.MAX_VALUE)
+                        .addComponent(XBtn)
+                        .addGap(16, 16, 16))
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(UNameTb)
-                                    .addComponent(PasswordTb))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
-                                .addComponent(XBtn)
-                                .addGap(16, 16, 16))
-                            .addGroup(layout.createSequentialGroup()
                                 .addGap(64, 64, 64)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(AdminBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(SignInBtn))
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(155, 155, 155)
-                        .addComponent(jLabel3)
-                        .addContainerGap())))
+                                .addComponent(SignInBtn))
+                            .addComponent(jLabel3))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -147,58 +140,65 @@ public class LogInForm extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(XBtn))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel3)
-                .addGap(35, 35, 35)
+                .addGap(47, 47, 47)
                 .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(UNameTb, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(UsernameTb, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(PasswordTb, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(29, 29, 29)
                 .addComponent(SignInBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(AdminBtn)
-                .addContainerGap(55, Short.MAX_VALUE))
+                .addContainerGap(77, Short.MAX_VALUE))
         );
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void UNameTbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UNameTbActionPerformed
+    private void UsernameTbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UsernameTbActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_UNameTbActionPerformed
+    }//GEN-LAST:event_UsernameTbActionPerformed
 
     private void SignInBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SignInBtnActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_SignInBtnActionPerformed
-
-    private void AdminBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_AdminBtnMouseClicked
-        new AdminLogin().setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_AdminBtnMouseClicked
 
     private void XBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_XBtnMouseClicked
         System.exit(1);
     }//GEN-LAST:event_XBtnMouseClicked
 
     private void SignInBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SignInBtnMouseClicked
-        if(UNameTb.getText().isEmpty()||PasswordTb.getText().isEmpty())
+        if(UsernameTb.getText().isEmpty()||PasswordTb.getText().isEmpty())
         {
-            JOptionPane.showMessageDialog(this,"");
+            JOptionPane.showMessageDialog(this,"Nuk keni plotesuar fushat");
         }else
         {
-            String Query ="select * from LibrarianTbl where LibName='"+UNameTb.getText()+"'and LibPass = '"+PasswordTb.getText()+"'";
+            String Query ="select * from users where uUsername='"+UsernameTb.getText()+"'and uPassword = '"+PasswordTb.getText()+"'";
             try{
-                Con=DriverManager.getConnection("jdbc:mysql://localhost:3306/librarydb","root","");
+                Con=DriverManager.getConnection("jdbc:mysql://localhost:3308/sistemipërmenaxhimineoraritprovimeve","root","");
                 St=Con.createStatement();
                 Rs=St.executeQuery(Query);
                 if(Rs.next()){
+                    if(Rs.getString("RoleID").equals("1")){
+                    username=Rs.getString("uUsername");
                     new MainMenu().setVisible(true);
                     this.dispose();
+                    
+//                    this.password=Rs.getString("uPassword");
+                   
+                    }
+                    else{
+                    username=Rs.getString("uUsername");
+                    new OrariProvimeve(username).setVisible(true); 
+                    
+//                    this.password=Rs.getString("uPassword");
+                    
+
+                    }
                 }else{
                     JOptionPane.showMessageDialog(this,"Wrong UserName and Password!!!");
                 }
@@ -208,6 +208,10 @@ public class LogInForm extends javax.swing.JFrame {
         
         }
     }//GEN-LAST:event_SignInBtnMouseClicked
+
+    private void PasswordTbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PasswordTbActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_PasswordTbActionPerformed
 
     /**
      * @param args the command line arguments
@@ -245,10 +249,9 @@ public class LogInForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel AdminBtn;
     private javax.swing.JPasswordField PasswordTb;
     private javax.swing.JButton SignInBtn;
-    private javax.swing.JTextField UNameTb;
+    private javax.swing.JTextField UsernameTb;
     private javax.swing.JLabel XBtn;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

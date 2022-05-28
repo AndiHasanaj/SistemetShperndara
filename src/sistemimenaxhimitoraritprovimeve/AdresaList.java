@@ -9,6 +9,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import javax.swing.table.DefaultTableModel;
 import net.proteanit.sql.DbUtils;
+import java.sql.*;
 
 
 public class AdresaList extends javax.swing.JFrame {
@@ -24,9 +25,9 @@ public class AdresaList extends javax.swing.JFrame {
 
     private void DisplayAdresa(){
         try{
-            Con=DriverManager.getConnection("jdbc:mysql://localhost:3306/librarydb","root","");
+            Con=DriverManager.getConnection("jdbc:mysql://localhost:3308/sistemipërmenaxhimineoraritprovimeve","root","");
             St=Con.createStatement();
-            Rs=St.executeQuery("Select * from AdresaTbl");
+            Rs=St.executeQuery("Select * from Adresa");
             AdresaTable.setModel(DbUtils.resultSetToTableModel(Rs));
         
         }catch(SQLException e){
@@ -55,8 +56,6 @@ public class AdresaList extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         AdresaTable = new javax.swing.JTable();
-        jLabel1 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         ShtetiTb = new javax.swing.JTextField();
         ZipKodiTb = new javax.swing.JTextField();
@@ -96,16 +95,6 @@ public class AdresaList extends javax.swing.JFrame {
             }
         });
         jScrollPane1.setViewportView(AdresaTable);
-
-        jLabel1.setText("Numri i Lëndeve është :");
-
-        jTextField2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jTextField2.setText("Search");
-        jTextField2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField2ActionPerformed(evt);
-            }
-        });
 
         jLabel5.setFont(new java.awt.Font("Bahnschrift", 0, 14)); // NOI18N
         jLabel5.setText("Shteti");
@@ -189,12 +178,9 @@ public class AdresaList extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(QytetiTb, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(261, 261, 261)
-                                .addComponent(jTextField2))
+                                    .addComponent(QytetiTb, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 421, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1035, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1035, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         jPanel1Layout.setVerticalGroup(
@@ -203,18 +189,15 @@ public class AdresaList extends javax.swing.JFrame {
                 .addGap(28, 28, 28)
                 .addComponent(jLabel2)
                 .addGap(28, 28, 28)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel6)
-                            .addComponent(jLabel7))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(ShtetiTb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(ZipKodiTb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(QytetiTb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(jLabel6)
+                    .addComponent(jLabel7))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(ShtetiTb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ZipKodiTb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(QytetiTb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(DeleteBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -223,9 +206,7 @@ public class AdresaList extends javax.swing.JFrame {
                     .addComponent(BackBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 406, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel1)
-                .addContainerGap(25, Short.MAX_VALUE))
+                .addContainerGap(59, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -245,10 +226,6 @@ public class AdresaList extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField2ActionPerformed
-
     private void QytetiTbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_QytetiTbActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_QytetiTbActionPerformed
@@ -258,8 +235,17 @@ public class AdresaList extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Select a Adress !!");
         }else{
             try{
-                Con=DriverManager.getConnection("jdbc:mysql://localhost:3306/librarydb","root","");
-                String Query="Delete from AdresaTbl where AdresaID="+Key;
+                Con=DriverManager.getConnection("jdbc:mysql://localhost:3308/sistemipërmenaxhimineoraritprovimeve","root","");
+                String Query="DELETE FROM adresa WHERE AdresaID="+Key;
+                
+                
+                
+                //LTER TABLE your_table_name_here DROP FOREIGN KEY name_of_your_constraint;
+                
+                //ALTER TABLE your_table_name_here ADD FOREIGN KEY (parent_id) REFERENCES parent(id) ON DELETE CASCADE EDHEEE UN UPDATE CASCADE;
+                
+                
+                
                 Statement Del=Con.createStatement();
                 Del.executeUpdate(Query);
                 JOptionPane.showMessageDialog(this,"Adresa Deleted!!!");
@@ -279,12 +265,11 @@ public class AdresaList extends javax.swing.JFrame {
         }else{
             try{
                 CountBooks();
-                Con=DriverManager.getConnection("jdbc:mysql://localhost:3306/librarydb","root","");
-                PreparedStatement Save=Con.prepareStatement("Insert into AdresaTbl values (?,?,?)");
-                Save.setInt(1, AdresaID);
-                Save.setString(2, ShtetiTb.getText());
-                Save.setInt(3, ZipKodiTb);
-                Save.setString(4, QytetiTb.getText());
+                Con=DriverManager.getConnection("jdbc:mysql://localhost:3308/sistemipërmenaxhimineoraritprovimeve","root","");
+                PreparedStatement Save=Con.prepareStatement("Insert into Adresa (Shteti,ZipKodi,Qyteti) values (?,?,?)");
+                Save.setString(1, ShtetiTb.getText());
+                Save.setString(2, ZipKodiTb.getText());
+                Save.setString(3, QytetiTb.getText());
                 int row=Save.executeUpdate();
                 JOptionPane.showMessageDialog(this, "Adresa Added!!!");
                 Con.close();
@@ -298,14 +283,13 @@ public class AdresaList extends javax.swing.JFrame {
 
     private void EditoBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditoBtnActionPerformed
         
-        if(!(ShtetiTb.getText().isEmpty()||ZipKodi.getText().isEmpty()||ShtetiTb.getText().isEmpty())){
+        if(!(ShtetiTb.getText().isEmpty()||ZipKodiTb.getText().isEmpty()||ShtetiTb.getText().isEmpty())){
             try{
-                String UpdateQuery="Update BookTbl set BName=?,Author=?,Price=? where BID=?"+Key;
-                Con=DriverManager.getConnection("jdbc:mysql://localhost:3306/librarydb","root","");
+                String UpdateQuery="Update Adresa set Shteti=?,ZipKodi=?,Qyteti=? where AdresaID="+Key;
+                Con=DriverManager.getConnection("jdbc:mysql://localhost:3308/sistemipërmenaxhimineoraritprovimeve","root","");
                 PreparedStatement Save=Con.prepareStatement(UpdateQuery);
-                Save.setInt(4, Key);
                 Save.setString(1, ShtetiTb.getText());
-                Save.setInt(2, ZipKodiTb.getText());
+                Save.setString(2, ZipKodiTb.getText());
                 Save.setString(3, QytetiTb.getText());
                 if(Save.executeUpdate()==1){
                     DisplayAdresa();
@@ -326,7 +310,7 @@ public class AdresaList extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_BackBtnActionPerformed
 
-    int Key=-1;
+    int Key=0;
     private void AdresaTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_AdresaTableMouseClicked
         DefaultTableModel model =(DefaultTableModel) AdresaTable.getModel();
         int MyIndex=AdresaTable.getSelectedRow();
@@ -386,13 +370,11 @@ public class AdresaList extends javax.swing.JFrame {
     private javax.swing.JButton SaveBtn;
     private javax.swing.JTextField ShtetiTb;
     private javax.swing.JTextField ZipKodiTb;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField jTextField2;
     // End of variables declaration//GEN-END:variables
 }
