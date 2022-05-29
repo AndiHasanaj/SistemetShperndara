@@ -34,6 +34,8 @@ public class OrariProvimeve extends javax.swing.JFrame {
     Statement St=null,St1=null;
     
     public String username;
+    
+  
     public OrariProvimeve(String string) {
         initComponents();
         
@@ -41,7 +43,7 @@ public class OrariProvimeve extends javax.swing.JFrame {
         DisplayOrariProvimeve1();
         
         
-        JOptionPane.showMessageDialog(this,username);
+        JOptionPane.showMessageDialog(this,"Welcome: "+username);
     }
 
     /**
@@ -55,7 +57,6 @@ public class OrariProvimeve extends javax.swing.JFrame {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         OrariProvimeveTable = new javax.swing.JTable();
-        LogOut = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -80,22 +81,10 @@ public class OrariProvimeve extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(OrariProvimeveTable);
 
-        LogOut.setFont(new java.awt.Font("Bahnschrift", 0, 24)); // NOI18N
-        LogOut.setText("LogOut");
-        LogOut.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                LogOutMouseClicked(evt);
-            }
-        });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(LogOut)
-                .addGap(38, 38, 38))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1035, Short.MAX_VALUE)
@@ -106,8 +95,7 @@ public class OrariProvimeve extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 348, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(LogOut))
+                .addGap(36, 36, 36))
         );
 
         pack();
@@ -117,7 +105,7 @@ public class OrariProvimeve extends javax.swing.JFrame {
     private void DisplayOrariProvimeve1(){
         try{
             
-            JOptionPane.showMessageDialog(this,username);
+           
             Con=DriverManager.getConnection("jdbc:mysql://localhost:3308/sistemipërmenaxhimineoraritprovimeve","root","");
             St=Con.createStatement();
               
@@ -144,11 +132,6 @@ public class OrariProvimeve extends javax.swing.JFrame {
         
 
     }//GEN-LAST:event_OrariProvimeveTableMouseClicked
-
-    private void LogOutMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_LogOutMouseClicked
-        new LogInForm().setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_LogOutMouseClicked
 
     /**
      * @param args the command line arguments
@@ -186,7 +169,6 @@ public class OrariProvimeve extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel LogOut;
     private javax.swing.JTable OrariProvimeveTable;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
